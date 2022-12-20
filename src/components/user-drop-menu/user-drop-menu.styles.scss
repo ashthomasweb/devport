@@ -1,0 +1,59 @@
+// user-drop-menu.styles.scss
+/******************************************************************************
+* FILENAME:
+*   header-comment-block.mjs
+
+* DESCRIPTION:
+*   This is an area to place a general description of the file. Please limit
+*   line length to less than 80. The header delimiter is 80 characters long.
+*   Place an asterisk in column 1 to continue blocked comments.
+
+* NOTES:
+*   - 
+
+* (c) Copyright Kloudlog LLC
+* Usage Rights: Not for public use or redistribution.
+
+******************************************************************************/
+
+.user-drop-menu {
+    background-color: #252525;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+
+    position: absolute;
+    width: 160px;
+    height: 75px;
+    right: 100px;
+    top: 95px;
+    filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.2));
+
+    .drop-item {
+        font-family: proxima-nova, sans-serif;
+        font-weight: 500;
+        font-size: 16px;
+        background-color: #00000000;
+        color: white;
+        line-height: 11px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 12px 12px 8px;
+        gap: 10px;
+
+        width: 160px;
+        height: 36px;
+        border-radius: 10px 10px 10px 10px;
+        flex: none;
+        order: 1;
+        align-self: stretch;
+        flex-grow: 0;
+        cursor: pointer;
+    }
+}
+
+
+/* END of document ***********************************************************/

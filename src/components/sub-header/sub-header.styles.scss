@@ -1,0 +1,20 @@
+.sub-header-container {
+    display: flex;
+    width: 100vw;
+    height: 95px;
+    align-items: center;
+    gap: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    position: fixed;
+    top: 110px;
+
+    button {
+        color: white;
+        position: fixed;
+        right: -9px;
+        height: 75px;
+    }
+}

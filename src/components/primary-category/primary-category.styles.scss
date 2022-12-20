@@ -1,0 +1,20 @@
+.primary-category-container {
+    // display: flex;
+    position: relative;
+    border: 2px solid grey;
+    background-color: #333;
+    width: 200px;
+    height: 50px;
+    padding: 10px;
+    min-width: 120px;
+
+    button {
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        padding: 2px;
+        font-size: 14px;
+        background-color: grey;
+        right: 4px
+    }
+}
