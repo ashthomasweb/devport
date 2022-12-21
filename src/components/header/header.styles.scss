@@ -14,7 +14,6 @@
 ******************************************************************************/
 
 .header {
-  height: 72px;
   width: 100%;
   background-color: black;
   display: flex;
@@ -208,7 +207,7 @@
     font-family: proxima-nova, sans-serif;
     font-size: 30px;
     font-weight: 800;
-
+    box-sizing: content-box;
     display: none;
     position: absolute;
     width: 400px;

@@ -18,6 +18,9 @@
 ******************************************************************************/
 
 /* IMPORTS *********************************************************/
+/* Types */ 
+// import { entryType } from './types/main-types'
+// import { codePackType } from './types/codePack-type'
 
 /* Firebase */
 import {
@@ -25,6 +28,8 @@ import {
   userInitializationHandler,
   savePrimaryCategoryToDB,
   gatherUserPrimaryCategoriesFromDB,
+  authListener,
+  gatherSinglePrimaryCategoryFromDB
 } from './firebase/firebase'
 
 /* Components */
@@ -37,16 +42,22 @@ import UserDropMenu from './components/user-drop-menu/user-drop-menu.component'
 import SubHeader from './components/sub-header/sub-header.component'
 import PrimaryCategory from './components/primary-category/primary-category.component'
 import AddPane from './components/add-pane/add-pane.component'
+import PrimaryPane from './components/primary-pane/primary-pane.component'
+import PaneContainer from './components/pane-container/pane-container.component'
+import SubCategory from './components/sub-category/sub-category.component'
 
 /* Mapped Assets */
 
 /* Initial Assets */
 
 /* Helper Methods */
-
+import { indexFinder } from './utilities/look-up-methods'
 /* Icons */
 
 /* EXPORTS *********************************************************/
+
+/* Types */ 
+// export { entryType, codePackType }
 
 /* Firebase */
 export {
@@ -54,6 +65,8 @@ export {
   userInitializationHandler,
   savePrimaryCategoryToDB,
   gatherUserPrimaryCategoriesFromDB,
+  authListener,
+  gatherSinglePrimaryCategoryFromDB
 }
 
 /* Components */
@@ -67,6 +80,9 @@ export {
   SubHeader,
   PrimaryCategory,
   AddPane,
+  PrimaryPane,
+  PaneContainer,
+  SubCategory
 }
 
 /* Mapped Assets */
@@ -74,7 +90,7 @@ export {
 /* Initial Assets */
 
 /* Helper Methods */
-
+export { indexFinder }
 /* Icons */
 
 /* END OF DOCUMENT ***********************************************************/

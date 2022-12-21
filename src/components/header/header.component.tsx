@@ -1,4 +1,4 @@
- /******************************************************************************
+/******************************************************************************
 * FILENAME:
 *   header.component.tsx
 
@@ -25,17 +25,15 @@ import {
   /* Assets */
   /* Database */
   /* Helper Function */
- 
+
   /* Components */
   SignInUpModal,
-  UserDropMenu
+  UserDropMenu,
   /* Icons */
-  
 } from '../../export-hub'
 
 import 'react-toastify/dist/ReactToastify.css'
 import './header.styles.scss'
-
 
 const modalToggle = () => {
   // NEEDS DISPLAY REDUCER - no DOM queries!
@@ -79,18 +77,19 @@ const Header = (props: any): JSX.Element => {
   return (
     <div
       className='header'
-     
+      style={{ height: `${display.headerHeight}px` }}
       ref={headerRef}>
       <div className='title-control-wrapper'>
-        
-
-        <h1
-          >
-          DevPort
-        </h1>
-
+        <h1>DevPort</h1>
       </div>
-      { <ToastContainer />}
+      {
+        <ToastContainer
+          position='bottom-right'
+          autoClose={1700}
+          theme='dark'
+          limit={3}
+        />
+      }
       {/* {globalDisplay.isAdminPage && <SearchBar />} */}
 
       {/* {globalDisplay.isBoardPage && (
@@ -99,28 +98,26 @@ const Header = (props: any): JSX.Element => {
         </div>
       )} */}
 
-{display.isUserDropDown && <UserDropMenu />}
+      {display.isUserDropDown && <UserDropMenu />}
 
       {/* USER ACCOUNT BUTTON */}
       {userObj && (
-     
-     <button
-     className='user-photo'
-     data-text='User Options'
-     onClick={signOutDropDown}
-     >
-     <img
-       style={{
-         height: '32px',
-         width: '32px',
-         borderRadius: '100%',
-         cursor: 'pointer',
-         margin: '0 5px',
-       }}
-       src={`${userObj.photoURL}`}
-       alt='userimg'
-     />
-   </button>
+        <button
+          className='user-photo'
+          data-text='User Options'
+          onClick={signOutDropDown}>
+          <img
+            style={{
+              height: '32px',
+              width: '32px',
+              borderRadius: '100%',
+              cursor: 'pointer',
+              margin: '0 5px',
+            }}
+            src={`${userObj.photoURL}`}
+            alt='userimg'
+          />
+        </button>
       )}
 
       {/* SIGN UP - WELCOME PAGE ONLY */}

@@ -17,8 +17,12 @@
 ******************************************************************************/
 
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { toast } from 'react-toastify'
+import { newEntry } from '../components/add-pane/add-pane.component'
+import cloneDeep from 'lodash.clonedeep'
+import { entryType } from '../components/add-pane/add-pane.component'
+
 import {
   getFirestore,
   collection,
@@ -55,104 +59,135 @@ export const userInitializationHandler = async (
   let domain = userAuth.email
   domainBasedCollectionName = domain
 
-  onSnapshot(
-    doc(
-      db,
-      'users',
-      domainBasedCollectionName,
-    ),
-    async (document) => {
-      if (!document.exists()) {
-        // if no record of user in DB, create record
-        const createdAt = new Date()
-        const { displayName, email, photoURL, uid } = userAuth
-        let user = {
-          displayName,
-          email,
-          photoURL,
-          uid,
-          createdAt,
-          ...additionalData,
-        }
-        try {
-          await setDoc(
-            doc(
-              db,
-              'users',
-              domainBasedCollectionName,
-            ),
-            user
-          )
-          await globalDispatch({
-            type: 'SET_CURRENT_USER_TO_STATE',
-            payload: { userObj: user },
-          })
-          toast('User created!')
-          // await unSubFirestore()
-        } catch (error) {
-          console.log('error creating user', error.message)
-        }
-      } else if (document.exists()) {
-        // if record already created, retrieve from DB and add current Auth packet to user for this session
-        let userObjFromDB = document.data()
-        userObjFromDB = {
-          ...userObjFromDB,
-          auth: userAuth,
-        }
-
+  onSnapshot(doc(db, 'users', domainBasedCollectionName), async (document) => {
+    if (!document.exists()) {
+      // if no record of user in DB, create record
+      console.log('no')
+      const createdAt = new Date()
+      const { displayName, email, photoURL, uid } = userAuth
+      let user = {
+        displayName,
+        email,
+        photoURL,
+        uid,
+        createdAt,
+        ...additionalData,
+      }
+      try {
+        await setDoc(doc(db, 'users', domainBasedCollectionName), user)
         await globalDispatch({
           type: 'SET_CURRENT_USER_TO_STATE',
-          payload: { userObj: userObjFromDB },
+          payload: { userObj: user },
         })
-        await gatherUserPrimaryCategoriesFromDB(userAuth, dispatch)
-        toast('User logged in')
+        toast('User created!')
+        // await unSubFirestore()
+      } catch (error) {
+        console.log('error creating user', error.message)
       }
+    } else if (document.exists()) {
+      console.log('yes')
+      // if record already created, retrieve from DB and add current Auth packet to user for this session
+      let userObjFromDB = document.data()
+      userObjFromDB = {
+        ...userObjFromDB,
+        auth: userAuth,
+      }
+
+      globalDispatch({
+        type: 'SET_CURRENT_USER_TO_STATE',
+        payload: { userObj: userObjFromDB },
+      })
+      gatherUserPrimaryCategoriesFromDB(userAuth, dispatch)
+      toast('User logged in')
     }
-  )
-
+  })
 }
-
+const backwardCompat = (entryArray) => {
+  let newClone = cloneDeep(newEntry)
+  let array: any[] = []
+  entryArray.forEach((entry: entryType) => {
+    entry = {
+      ...newClone,
+      ...entry
+    }
+    array.push(entry)
+  })
+  return array
+}
 export const gatherUserPrimaryCategoriesFromDB = async (userAuth, dispatch) => {
+  console.log(`Trace: gatherUserPrimaryCategoriesFromDB()`)
   if (!userAuth) return
   let primaryCategories: any = []
+  let parsedArray: any[] = []
   const userCategoryFirestoreRef = await collection(
     db,
     'users',
     domainBasedCollectionName,
-    'primaryCategories',
+    'primaryCategories'
   )
   const userCategoryQuery = query(userCategoryFirestoreRef)
   const userCategorySnapshot = await getDocs(userCategoryQuery)
   userCategorySnapshot.forEach((doc) => {
-    doc.data().deletedAt === null && primaryCategories.push(doc.data())
+    primaryCategories.push(doc.data())
   })
-  dispatch({ type: 'SET_PRIMARY_CATEGORIES', payload: { primaryCategories: primaryCategories } })
+  let compatibileArray = backwardCompat(primaryCategories)
+  compatibileArray.forEach((doc) => {
+    doc.deletedAt === null && parsedArray.push(doc)
+  })
+  dispatch({
+    type: 'SET_PRIMARY_CATEGORIES',
+    payload: { primaryCategories: parsedArray },
+  })
+}
+
+export const gatherSinglePrimaryCategoryFromDB = async (userAuth, dispatch, id) => {
+  console.log(`Trace: gatherSinglePrimaryCategoryFromDB()`)
+  if (!userAuth) return
+  let workingObject: any
+  const userCategoryFirestoreRef = await collection(
+    db,
+    'users',
+    domainBasedCollectionName,
+    'primaryCategories'
+  )
+  const userCategoryQuery = query(userCategoryFirestoreRef)
+  const userCategorySnapshot = await getDocs(userCategoryQuery)
+  await userCategorySnapshot.forEach((doc) => {
+    if (doc.data().id === id) {
+      workingObject = doc.data()
+    }
+  })
+  dispatch({
+    type: 'SET_WORKING_OBJECT',
+    payload: { workingObject: workingObject }
+  })
+  
 }
 
 export const savePrimaryCategoryToDB = async (dataPacket) => {
   if (dataPacket.title === '') return
 
-  const {
-    title,
-    subtitle,
-    deletedAt
-  } = dataPacket
+  const { id, type, title, subtitle, deletedAt, entries, codePacket } = dataPacket
 
   const boardFireStoreRef = doc(
     db,
     'users',
     domainBasedCollectionName,
     'primaryCategories',
-    `${dataPacket.title}`
+    `${dataPacket.id}`
   )
   const boardSnapShot = await getDoc(boardFireStoreRef)
 
   if (!boardSnapShot.exists()) {
     // if no record of user in DB, create record
     let board = {
+      id,
+      type,
       title,
       subtitle,
-      deletedAt
+      deletedAt,
+      entries,
+      codePacket
     }
     try {
       await setDoc(boardFireStoreRef, board)
@@ -163,9 +198,13 @@ export const savePrimaryCategoryToDB = async (dataPacket) => {
     }
   } else if (boardSnapShot.exists()) {
     let board = {
+      id,
+      type,
       title,
       subtitle,
-      deletedAt
+      deletedAt,
+      entries,
+      codePacket
     }
     try {
       await setDoc(boardFireStoreRef, board, { merge: true })
@@ -175,6 +214,32 @@ export const savePrimaryCategoryToDB = async (dataPacket) => {
       toast('error creating category')
     }
   }
+}
+
+export const authListener = (
+  display: any,
+  dispatch: (input:any) => void,
+  globalDispatch: (input: any) => void,
+  userAuth: any
+) => {
+  // let userAuth = getAuth()
+  const unSubAuth = onAuthStateChanged(userAuth, async (userAuth: any) => {
+    if (userAuth) {
+      await userInitializationHandler(
+        userAuth,
+        dispatch,
+        globalDispatch,
+        null,
+        unSubAuth,
+        display.isInitialModal
+      )
+    } else if (userAuth === null) {
+      globalDispatch({
+        type: 'SET_CURRENT_USER_TO_STATE',
+        payload: { userObj: null },
+      })
+    }
+  })
 }
 
 // export const deleteUserBoard = async (userAuth, boardName) => {

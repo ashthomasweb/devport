@@ -14,7 +14,6 @@
 ******************************************************************************/
 
 
-import { PrimaryCategory } from '../../export-hub'
 
 export const MainReducer = (state: any, action: any) => {
   /* Helper functions to setup, package, and return the notes array */
@@ -62,6 +61,39 @@ export const MainReducer = (state: any, action: any) => {
       return {
         ...state,
         primaryCategories: primaryCategories
+      }
+    }
+
+    case 'SET_WORKING_OBJECT': {
+      let workingObject = action.payload.workingObject
+      return {
+        ...state,
+        workingObject: workingObject
+      }
+    }
+    
+    case 'OPEN_PRIMARY_PANE': {
+      console.log('1')
+      let display = {
+        ...state.display,
+        isPrimaryPaneOpen: true,
+        currentPrimary: action.payload?.category
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    
+    case 'TOG_PRIMARY_PANE': {
+      let display = {
+        ...state.display,
+        isPrimaryPaneOpen: !state.display.isPrimaryPaneOpen,
+      }
+      return {
+        ...state,
+        display: display,
       }
     }
 

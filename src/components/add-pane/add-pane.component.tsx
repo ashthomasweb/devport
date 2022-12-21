@@ -16,8 +16,10 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
+import cloneDeep from 'lodash.clonedeep'
 
 import {
+  /* Types */
   /* Assets */
   /* Database */
   savePrimaryCategoryToDB,
@@ -28,9 +30,35 @@ import {
 
 import './add-pane.styles.scss'
 
+export interface entryType {
+  id: number
+  type: string
+  title: string
+  subtitle: string
+  deletedAt: number | null
+  entries: any[]
+  codePacket: any[]
+}
+
+export const newEntry: entryType = {
+  id: 0,
+  type: '',
+  title: '',
+  subtitle: '',
+  deletedAt: null,
+  entries: [],
+  codePacket: [],
+}
+
+interface codePackType {
+  title: string
+  languageExt: string
+  content: string
+}
+
 const AddPane = (props: any): JSX.Element => {
   const {
-    state: { display },
+    state: { display, workingObject },
     dispatch,
   } = useContext(MainContext)
   const {
@@ -49,19 +77,68 @@ const AddPane = (props: any): JSX.Element => {
   let subtitleRef: any = useRef(null)
 
   const createCategory = (e: any) => {
-    let dataPacket = {
+    let dataPacket: entryType = {
+      id: Math.random() * 10e18,
+      type: 'category',
       title: primaryRef.current.value,
       subtitle: subtitleRef.current.value,
-      deletedAt: null
+      deletedAt: null,
+      entries: [],
+      codePacket: [],
     }
     dispatch({
       type: 'CREATE_PRIMARY',
       payload: { entry: dataPacket },
     })
-    console.log(userObj.auth)
     savePrimaryCategoryToDB(dataPacket)
   }
 
+  const addToCategory = (e: any) => {
+    let workingEntries = workingObject.entries
+    
+    let dataPacket = cloneDeep(newEntry)
+    dataPacket.title = primaryRef.current.value
+    dataPacket.subtitle = subtitleRef.current.value
+    dataPacket.id = Math.random() * 10e18
+    workingEntries.push(dataPacket)
+    dispatch({
+      type: 'SET_WORKING_OBJECT',
+      payload: { workingObject: workingObject },
+    })
+    savePrimaryCategoryToDB(workingObject)
+  }
+
+  // const editCategory = (e: any) => {
+  //   let dataPacket = {
+  //     entries: [
+  //       {
+  //         title: primaryRef.current.value,
+  //         subtitle: subtitleRef.current.value,
+  //         deletedAt: null,
+  //       },
+  //     ],
+  //   }
+  //   dispatch({
+  //     type: 'CREATE_PRIMARY',
+  //     payload: { entry: dataPacket },
+  //   })
+  //   console.log(userObj.auth)
+  //   savePrimaryCategoryToDB(dataPacket)
+  // }
+
+  // const test = (e: any) => {
+  //   let newEntry: any = { ...workingObject }
+
+  //   let newFile: codePackType = {
+  //     title: 'App.tsx',
+  //     languageExt: 'tsx',
+  //     content: subtitleRef.current.value,
+  //   }
+
+  //   workingObject?.entries.push(newFile)
+
+  //   console.log(newEntry)
+  // }
   // useEffect(() => {
 
   // }, [])
@@ -88,6 +165,7 @@ const AddPane = (props: any): JSX.Element => {
       <textarea ref={subtitleRef}></textarea>
       <button onClick={closePane}>Cancel</button>
       <button onClick={createCategory}>Create</button>
+      <button onClick={addToCategory}>add</button>
     </div>
   )
 }

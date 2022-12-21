@@ -15,35 +15,32 @@
 
 import React, { useContext, useEffect } from 'react'
 import { MainContext } from '../../context/main/MainState'
-import { GlobalContext } from '../../context/global/GlobalState'
 
 import { 
   /* Assets */
   /* Database */
   /* Helper Functions */
   /* Components */
-  PrimaryCategory
+  SubCategory,
   /* Icons */
 } from '../../export-hub'
 
-import './sub-header.styles.scss'
+import './primary-pane.styles.scss'
 
-const SubHeader = (props: any): JSX.Element => {
+const PrimaryPane = (props: any): JSX.Element => {
   const {
-    state: { primaryCategories, display },
+    state: { display, workingObject },
     dispatch,
   } = useContext(MainContext)
-  const {
-    state: {},
-    globalDispatch,
-  } = useContext(GlobalContext)
 
-  const toggleAddPane = () => {
-    dispatch({
-      type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: true }
-    })
-  }
+
+  // const myFunction = (e: any) => {
+  
+  // }
+
+  // useEffect(() => {
+   
+  // }, [])  
 
   // useEffect(() => {
   //   function namedFunction(e: any) {
@@ -57,15 +54,18 @@ const SubHeader = (props: any): JSX.Element => {
   // }, [])
 
   return (
-    <div className='sub-header-container' style={{height: `${display.subheaderHeight}px`, top: `${display.headerHeight}px` }}>
-      {primaryCategories.map((category: string | null, index: number) => {
-        return <PrimaryCategory key={index} data={category}/>
-      })}
-      <button onClick={toggleAddPane}>Add</button>
+    <div className='primary-pane-container'>
+      { display.currentPrimary }
+      { workingObject?.entries.map((entry: any, index: number) => {
+        if (entry.deletedAt === null) {
+          return <SubCategory key={index} data={entry} />
+        } else return
+      }
+      )}
     </div>
   )
 }
 
-export default SubHeader
+export default PrimaryPane
 
-// END of document
+/* END of document ***********************************************************/

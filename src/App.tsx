@@ -7,12 +7,13 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import {
   /* Assets */
   /* Database */
-  userInitializationHandler,
+  authListener,
   /* Helper Functions */
   /* Components */
   DisplayPane,
   /* Icons */
 } from './export-hub.js'
+import { user } from 'firebase-functions/v1/auth'
 
 const App = (props: any): JSX.Element => {
   const {
@@ -24,15 +25,12 @@ const App = (props: any): JSX.Element => {
     globalDispatch,
   } = useContext(GlobalContext)
 
-  return (
-    <>
-      <GlobalState>
-        <MainState>
-          <DisplayPane />
-        </MainState>
-      </GlobalState>
-    </>
-  )
+  let userAuth = getAuth()
+  useEffect(() => {
+    authListener(display, dispatch, globalDispatch, userAuth)
+  }, [])
+
+  return <DisplayPane />
 }
 
 export default App

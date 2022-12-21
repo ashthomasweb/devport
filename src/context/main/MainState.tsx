@@ -17,6 +17,9 @@ import React, { createContext, useReducer, useMemo } from 'react'
 import { MainReducer } from './MainReducer'
 
 import {
+  /* Types */
+  // entryType,
+  // codePack
   /* Assets */
   /* Database */
   /* Helper Functions */
@@ -30,19 +33,39 @@ interface initialStateType {
   userObj: any
   display: any
   primaryCategories: any[]
+  workingObject: any
 }
+
+// interface entryType {
+//   id: number
+//   type: string
+//   title: string
+//   subtitle: string
+//   entries: any[]
+//   codePacket: any[]
+// }
+
+// interface codePack {
+//   title: string
+//   languageExt: string
+//   content: string
+// }
 
 /** INITIAL STATE DECLARATION **************************************/
 
 const initialState = {
   userObj: null,
-  primaryCategories: [
-  ],
   display: {
     isAddPane: false,
     isUserDropDown: false,
-    isAddPrimary: false
-  }
+    isAddPrimary: false,
+    isPrimaryPaneOpen: false,
+    headerHeight: 72,
+    subheaderHeight: 95
+  },
+  primaryCategories: [
+  ],
+  workingObject: {}
 }
 
 export const MainContext = createContext<{

@@ -1,0 +1,22 @@
+.pane-container {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+
+    .inner-wrapper {
+        position: relative;
+
+        
+        button {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            padding: 0;
+            margin: 0;
+            background-color: rgb(215, 55, 55);
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
