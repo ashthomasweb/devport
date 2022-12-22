@@ -42,10 +42,11 @@ import UserDropMenu from './components/user-drop-menu/user-drop-menu.component'
 import SubHeader from './components/sub-header/sub-header.component'
 import PrimaryCategory from './components/primary-category/primary-category.component'
 import AddPane from './components/add-pane/add-pane.component'
-import PrimaryPane from './components/primary-pane/primary-pane.component'
+import SubcategoryPane from './components/subcategory-pane/subcategory-pane.component'
 import PaneContainer from './components/pane-container/pane-container.component'
 import SubCategory from './components/sub-category/sub-category.component'
-
+import SubSubcategoryPane from './components/subsubcategory-pane/subsubcategory-pane.component'
+import FinalPane from './components/final-pane/final-pane.component'
 /* Mapped Assets */
 
 /* Initial Assets */
@@ -80,9 +81,11 @@ export {
   SubHeader,
   PrimaryCategory,
   AddPane,
-  PrimaryPane,
+  SubcategoryPane,
   PaneContainer,
-  SubCategory
+  SubCategory,
+  SubSubcategoryPane,
+  FinalPane
 }
 
 /* Mapped Assets */

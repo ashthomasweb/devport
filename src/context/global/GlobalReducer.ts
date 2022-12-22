@@ -30,7 +30,7 @@ export const GlobalReducer = (state: any, action: any) => {
 
 
     case 'SET_CURRENT_USER_TO_STATE': {
-      console.log(`Trace: SET_CURRENT_USER_TO_STATE()`)
+      // console.log(`Trace: SET_CURRENT_USER_TO_STATE()`)
       let data = action.payload.userObj
       let userObj = data
       return {

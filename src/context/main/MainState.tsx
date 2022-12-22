@@ -61,7 +61,7 @@ const initialState = {
     isAddPrimary: false,
     isEdit: false,
     editId: null,
-    isPrimaryPaneOpen: false,
+    isSubcategoryPaneOpen: false,
     headerHeight: 72,
     subheaderHeight: 95
   },

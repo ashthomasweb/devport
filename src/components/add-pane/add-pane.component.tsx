@@ -81,10 +81,11 @@ const AddPane = (props: any): JSX.Element => {
   let primaryRef: any = useRef(null)
   let subtitleRef: any = useRef(null)
 
-  const createCategory = (e: any) => {
+  /* Primary Category Actions */
+  const createPrimaryCat = (e: any) => {
     let dataPacket: entryType = {
       id: Math.random() * 10e18,
-      childOfChain: [],
+      childOfChain: [0],
       type: 'category',
       title: primaryRef.current.value,
       subtitle: subtitleRef.current.value,
@@ -98,8 +99,25 @@ const AddPane = (props: any): JSX.Element => {
     })
     savePrimaryCategoryToDB(dataPacket)
   }
+  
+  const editPrimaryCat = async (e: any) => {
+    let dataPack = {
+      title: primaryRef.current.value,
+      subtitle: subtitleRef.current.value,
+    }
+    let newWorkingObject = treeSearchAndUpdateInPlace(
+      workingObject,
+      display.editId,
+      display.idChain,
+      dataPack
+    )
+    await savePrimaryCategoryToDB(newWorkingObject)
+    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+  }
 
-  const addToCategory = (e: any) => {
+  /* Subcategory Actions */
+
+  const createSubcat = (e: any) => {
     let workingEntries = workingObject.entries
 
     let dataPacket = cloneDeep(newEntry)
@@ -115,57 +133,111 @@ const AddPane = (props: any): JSX.Element => {
     savePrimaryCategoryToDB(workingObject)
   }
 
-  const editCategory = async (e: any) => {
-    workingObject.title = primaryRef.current.value
-    workingObject.subtitle = subtitleRef.current.value
-
-    await savePrimaryCategoryToDB(workingObject)
-    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
-  }
-
-   const editSubcategory = async (e: any) => {
+  
+  const editSubcat = async (e: any) => {
     let dataPack = {
       title: primaryRef.current.value,
       subtitle: subtitleRef.current.value,
     }
     let newWorkingObject = treeSearchAndUpdateInPlace(
-         workingObject,
-         display.editId,
-         display.idChain,
-         dataPack
-       )
+      workingObject,
+      display.editId,
+      display.idChain,
+      dataPack
+    )
 
-     await savePrimaryCategoryToDB(newWorkingObject)
-     gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
-   }
+    await savePrimaryCategoryToDB(newWorkingObject)
+    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+  }
 
-  // const test = (e: any) => {
-  //   let newEntry: any = { ...workingObject }
+  /* SubSubcategory Actions */
 
-  //   let newFile: codePackType = {
-  //     title: 'App.tsx',
-  //     languageExt: 'tsx',
-  //     content: subtitleRef.current.value,
-  //   }
+  const createSubSubcat = (e: any) => {
+    let workingEntry =
+      workingObject.entries[
+        indexFinder(workingObject.entries, display.currentPaneParentId)
+      ]
 
-  //   workingObject?.entries.push(newFile)
+    let dataPacket = cloneDeep(newEntry)
+    dataPacket.title = primaryRef.current.value
+    dataPacket.subtitle = subtitleRef.current.value
+    dataPacket.id = Math.random() * 10e18
+    dataPacket.childOfChain.push(...workingEntry.childOfChain, workingEntry.id)
+    workingEntry.entries.push(dataPacket)
+    dispatch({
+      type: 'SET_WORKING_OBJECT',
+      payload: { workingObject: workingObject },
+    })
+    savePrimaryCategoryToDB(workingObject)
+  }
 
-  //   console.log(newEntry)
-  // }
-  // useEffect(() => {
+  
+  const editSubSubcat = async (e: any) => {
+    let dataPack = {
+      title: primaryRef.current.value,
+      subtitle: subtitleRef.current.value,
+    }
+    let newWorkingObject = treeSearchAndUpdateInPlace(
+      workingObject,
+      display.editId,
+      display.idChain,
+      dataPack
+    )
 
-  // }, [])
+    await savePrimaryCategoryToDB(newWorkingObject)
+    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+  }
 
-  // useEffect(() => {
-  //   function namedFunction(e: any) {
 
-  //   }
-  //   window.addEventListener('event', namedFunction)
 
-  //   return function cleanupEvListener() {
-  //     window.removeEventListener('event', namedFunction)
-  //   }
-  // }, [])
+  /* Final Category Actions */
+
+  const createFinalEntry = (e: any) => {
+    let workingEntry =
+      workingObject.entries[
+        indexFinder(workingObject.entries, display.currentPaneParentId)
+      ].entries[
+        indexFinder(
+          workingObject.entries[
+            indexFinder(workingObject.entries, display.currentPaneParentId)
+          ].entries,
+          display.finalPaneParentId
+        )
+      ]
+
+    let dataPacket = cloneDeep(newEntry)
+    dataPacket.title = primaryRef.current.value
+    dataPacket.subtitle = subtitleRef.current.value
+    dataPacket.id = Math.random() * 10e18
+    dataPacket.childOfChain.push(...workingEntry.childOfChain, workingEntry.id)
+    workingEntry.entries.push(dataPacket)
+    dispatch({
+      type: 'SET_WORKING_OBJECT',
+      payload: { workingObject: workingObject },
+    })
+    savePrimaryCategoryToDB(workingObject)
+  }
+
+  
+  const editFinalcat = async (e: any) => {
+    let dataPack = {
+      title: primaryRef.current.value,
+      subtitle: subtitleRef.current.value,
+    }
+    let newWorkingObject = treeSearchAndUpdateInPlace(
+      workingObject,
+      display.editId,
+      display.idChain,
+      dataPack
+    )
+
+    await savePrimaryCategoryToDB(newWorkingObject)
+    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+  }
+
+
+
+
 
   return (
     <div className='add-pane-container'>
@@ -179,12 +251,19 @@ const AddPane = (props: any): JSX.Element => {
       <span>Sub-Title</span>
       <textarea
         ref={subtitleRef}
-        defaultValue={`${display.isEdit ? display.editSubtitle : ''}`}></textarea>
+        defaultValue={`${
+          display.isEdit ? display.editSubtitle : ''
+        }`}></textarea>
       <button onClick={closePane}>Cancel</button>
-      <button onClick={createCategory}>Create</button>
-      <button onClick={addToCategory}>add</button>
-      {display.isEdit && <button onClick={editCategory}>edit</button>}
-      {display.isEdit && <button onClick={editSubcategory}>editsub</button>}
+      <button onClick={createPrimaryCat}>Create Primary</button>
+      <button onClick={createSubcat}>Create Sub</button>
+      <button onClick={createSubSubcat}>Create SubSub</button>
+      <button onClick={createFinalEntry}>Create Final</button>
+
+      {display.isEdit && <button onClick={editPrimaryCat}>editP</button>}
+      {display.isEdit && <button onClick={editSubcat}>editsub</button>}
+      {display.isEdit && <button onClick={editSubSubcat}>editsubsub</button>}
+      {display.isEdit && <button onClick={editSubSubcat}>editFinal</button>}
     </div>
   )
 }

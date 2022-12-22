@@ -33,20 +33,6 @@ const PaneContainer = (props: any): JSX.Element => {
   } = useContext(MainContext)
 
 
-  const closePane = (e: any) => {
-    dispatch({
-      type: 'TOG_PRIMARY_PANE'
-    })
-  }
-
-  
-  const addItem = (e: any) => {
-    dispatch({
-      type: 'TOG_ADD_PANE',
-      payload: {isAddPrimary: false}
-    })
-  }
-
   // useEffect(() => {
    
   // }, [])  
@@ -57,9 +43,7 @@ const PaneContainer = (props: any): JSX.Element => {
       <div className='inner-wrapper'>
         {props.children}
 
-        <button onClick={closePane}>X</button>
-        <button onClick={addItem} style={{right: `30px`, backgroundColor: 'lightgreen'}}>+</button>
-
+      
 
       </div>
     </div>

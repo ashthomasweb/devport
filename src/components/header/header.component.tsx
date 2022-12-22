@@ -80,7 +80,7 @@ const Header = (props: any): JSX.Element => {
       style={{ height: `${display.headerHeight}px` }}
       ref={headerRef}>
       <div className='title-control-wrapper'>
-        <h1>DevPort</h1>
+        <h1>Codioli</h1>
       </div>
       {
         <ToastContainer

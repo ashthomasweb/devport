@@ -27,8 +27,10 @@ import {
   Header,
   SubHeader,
   AddPane,
-  PrimaryPane,
+  SubcategoryPane,
+  SubSubcategoryPane,
   PaneContainer,
+  FinalPane
   /* Icons */
 } from '../../export-hub'
 
@@ -41,44 +43,15 @@ const DisplayPane = (props: any): JSX.Element => {
   } = useContext(MainContext)
   // const { state: { userObj, globalDisplay }, globalDispatch } = useContext(GlobalContext)
 
-  // function pageHandler() {
-  // if (globalDisplay.isBoardPage) {
-  //   return <MainBoard currentUser={userObj} />
-  // }
-  // if (globalDisplay.isAdminPage) {
-  //   return <AdminPage currentUser={userObj} />
-  // }
-  // if (globalDisplay.isWelcomePage) {
-  //   return <WelcomePage currentUser={userObj} />
-  // }
-  // }
-
-  // useEffect(() => {
-  //   if (userObj) {
-  //     globalDispatch({ type: 'ADMIN_PAGE_ON' })
-  //   }
-  // }, [globalDispatch, userObj])
-
-  // let displayConditional = {
-  //   height: globalDisplay.isWelcomePage ? '100vh' : '0',
-  // }
-
-  // useEffect(() => {
-  //   if (display.deviceScaling) {
-  //     dispatch({ type: 'SET_UIZOOM', payload: {uiZoom: 0.5}})
-  //   }
-  // }, [dispatch, display.deviceScaling])
-
-  // useEffect(()=> {
-
-  // })
 
   return (
     <div className='display-pane'>
       <Header />
       <SubHeader />
       <PaneContainer>
-        {display.isPrimaryPaneOpen && <PrimaryPane />}
+        {display.isSubcategoryPaneOpen && <SubcategoryPane />}
+        {display.isSubSubcategoryPaneOpen && <SubSubcategoryPane />}
+        {display.isFinalPaneOpen && <FinalPane />}
       </PaneContainer>
 
       {display.isAddPane && <AddPane />}

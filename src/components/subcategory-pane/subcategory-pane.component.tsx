@@ -25,22 +25,21 @@ import {
   /* Icons */
 } from '../../export-hub'
 
-import './primary-pane.styles.scss'
+import './subcategory-pane.styles.scss'
 
-const PrimaryPane = (props: any): JSX.Element => {
+const SubcategoryPane = (props: any): JSX.Element => {
   const {
     state: { display, workingObject },
     dispatch,
   } = useContext(MainContext)
 
-
   // const myFunction = (e: any) => {
-  
+
   // }
 
   // useEffect(() => {
-   
-  // }, [])  
+
+  // }, [])
 
   // useEffect(() => {
   //   function namedFunction(e: any) {
@@ -53,19 +52,41 @@ const PrimaryPane = (props: any): JSX.Element => {
   //   }
   // }, [])
 
+  
+  const closePane = (e: any) => {
+    dispatch({
+      type: 'TOG_SUBCAT_PANE',
+    })
+  }
+
+  const addItem = (e: any) => {
+    dispatch({
+      type: 'TOG_ADD_PANE',
+      payload: { isAddPrimary: false },
+    })
+  }
+
   return (
-    <div className='primary-pane-container'>
-      { display.currentPrimary }
-      { workingObject?.entries.map((entry: any, index: number) => {
+    <div className='subcategory-pane-container'>
+      {display.currentPrimary}
+      <br />
+      {display.currentPrimarySubtitle}
+
+      {workingObject?.entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <SubCategory key={index} data={entry} />
+          return <SubCategory key={index} data={entry} pane='sub' />
         } else return
-      }
-      )}
+      })}
+      <button onClick={closePane}>X</button>
+      <button
+        onClick={addItem}
+        style={{ right: `30px`, backgroundColor: 'lightgreen' }}>
+        +
+      </button>
     </div>
   )
 }
 
-export default PrimaryPane
+export default SubcategoryPane
 
 /* END of document ***********************************************************/

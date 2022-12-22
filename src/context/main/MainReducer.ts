@@ -20,7 +20,6 @@ export const MainReducer = (state: any, action: any) => {
 
 
   switch (action.type) {
-
     case 'TOG_USER_DROP_DOWN': {
       // console.log(`Trace: TOG_USER_DROP_DOWN()`)
       let display = {
@@ -43,14 +42,14 @@ export const MainReducer = (state: any, action: any) => {
         editId: action.payload?.editId,
         idChain: action.payload?.idChain,
         editTitle: action.payload?.title,
-        editSubtitle: action.payload?.subtitle
+        editSubtitle: action.payload?.subtitle,
       }
       return {
         ...state,
         display: display,
       }
     }
-    
+
     case 'CREATE_PRIMARY': {
       // console.log(`Trace: CREATE_PRIMARY()`)
       let primaryCategories = [...state.primaryCategories]
@@ -65,7 +64,7 @@ export const MainReducer = (state: any, action: any) => {
       let primaryCategories = [...action.payload.primaryCategories]
       return {
         ...state,
-        primaryCategories: primaryCategories
+        primaryCategories: primaryCategories,
       }
     }
 
@@ -73,16 +72,16 @@ export const MainReducer = (state: any, action: any) => {
       let workingObject = action.payload.workingObject
       return {
         ...state,
-        workingObject: workingObject
+        workingObject: workingObject,
       }
     }
-    
+
     case 'OPEN_PRIMARY_PANE': {
-      console.log('1')
       let display = {
         ...state.display,
-        isPrimaryPaneOpen: true,
-        currentPrimary: action.payload?.category
+        isSubcategoryPaneOpen: true,
+        currentPrimary: action.payload?.category,
+        currentPrimarySubtitle: action.payload?.subtitle
       }
       return {
         ...state,
@@ -90,11 +89,58 @@ export const MainReducer = (state: any, action: any) => {
       }
     }
 
-    
-    case 'TOG_PRIMARY_PANE': {
+    case 'TOG_SUBCAT_PANE': {
       let display = {
         ...state.display,
-        isPrimaryPaneOpen: !state.display.isPrimaryPaneOpen,
+        isSubcategoryPaneOpen: !state.display.isSubcategoryPaneOpen,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'TOG_SUBSUBCAT_PANE': {
+      let display = {
+        ...state.display,
+        isSubSubcategoryPaneOpen: !state.display.isSubSubcategoryPaneOpen,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'TOG_FINAL_PANE': {
+      let display = {
+        ...state.display,
+        isFinalPaneOpen: !state.display.isFinalPaneOpen,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'SET_CURRENT_PARENT_ID': {
+      let display = {
+        ...state.display,
+        currentPaneParentId: action.payload.id,
+        currentPaneParentTitle: action.payload.title,
+        currentPaneParentSubtitle: action.payload.subtitle,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'SET_FINAL_ID': {
+      let display = {
+        ...state.display,
+        finalPaneParentId: action.payload.id,
+        finalPaneParentTitle: action.payload.title,
+        finalPaneParentSubtitle: action.payload.subtitle,
       }
       return {
         ...state,

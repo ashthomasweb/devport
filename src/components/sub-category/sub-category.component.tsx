@@ -52,7 +52,7 @@ const SubCategory = (props: any): JSX.Element => {
 
 
 
-  // const openPrimaryPane = async () => {
+  // const openSubcategoryPane = async () => {
   //   dispatch({
   //     type: 'OPEN_PRIMARY_PANE',
   //     payload: {category: props.data.title}
@@ -60,7 +60,32 @@ const SubCategory = (props: any): JSX.Element => {
   //   gatherSinglePrimaryCategoryFromDB(userObj.auth, dispatch, props.data.title)
   // }
   
-  
+  const openPane = () => {
+    if (props.pane === 'sub') {
+      dispatch({
+        type: 'SET_CURRENT_PARENT_ID',
+        payload: { id: props.data.id, title: props.data.title, subtitle: props.data.subtitle }
+      })
+      dispatch({
+        type: 'TOG_SUBSUBCAT_PANE',
+      })
+    } else if (props.pane === 'subsub') {
+      dispatch({
+        type: 'SET_FINAL_ID',
+        payload: {
+          id: props.data.id,
+          title: props.data.title,
+          subtitle: props.data.subtitle,
+        },
+      })
+         dispatch({
+           type: 'TOG_FINAL_PANE',
+         })
+    }
+  }
+
+
+
   const updateSubcategory = async (e: any) => {
     e.preventDefault()
     let obj = await gatherSinglePrimaryCategoryFromDB(
@@ -74,7 +99,7 @@ const SubCategory = (props: any): JSX.Element => {
   }
 
   return (
-    <div className='sub-category-container' onContextMenu={updateSubcategory}>
+    <div className='sub-category-container' onContextMenu={updateSubcategory} onClick={openPane}>
       <button onClick={deleteSubcategory}>X</button>
       <h4>{props.data.title}</h4>
       <p>{props.data.subtitle}</p>

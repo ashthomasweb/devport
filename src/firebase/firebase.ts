@@ -62,7 +62,6 @@ export const userInitializationHandler = async (
   onSnapshot(doc(db, 'users', domainBasedCollectionName), async (document) => {
     if (!document.exists()) {
       // if no record of user in DB, create record
-      console.log('no')
       const createdAt = new Date()
       const { displayName, email, photoURL, uid } = userAuth
       let user = {
@@ -85,7 +84,6 @@ export const userInitializationHandler = async (
         console.log('error creating user', error.message)
       }
     } else if (document.exists()) {
-      console.log('yes')
       // if record already created, retrieve from DB and add current Auth packet to user for this session
       let userObjFromDB = document.data()
       userObjFromDB = {
@@ -115,7 +113,7 @@ const backwardCompat = (entryArray) => {
   return array
 }
 export const gatherUserPrimaryCategoriesFromDB = async (userAuth, dispatch) => {
-  console.log(`Trace: gatherUserPrimaryCategoriesFromDB()`)
+  // console.log(`Trace: gatherUserPrimaryCategoriesFromDB()`)
   if (!userAuth) return
   let primaryCategories: any = []
   let parsedArray: any[] = []
@@ -141,7 +139,7 @@ export const gatherUserPrimaryCategoriesFromDB = async (userAuth, dispatch) => {
 }
 
 export const gatherSinglePrimaryCategoryFromDB = async (userAuth, id) => {
-  console.log(`Trace: gatherSinglePrimaryCategoryFromDB()`)
+  // console.log(`Trace: gatherSinglePrimaryCategoryFromDB()`)
   if (!userAuth) return
   let workingObject: any
   const userCategoryFirestoreRef = await collection(
@@ -158,8 +156,6 @@ export const gatherSinglePrimaryCategoryFromDB = async (userAuth, id) => {
     }
   })
   return workingObject
-  
-  
 }
 
 export const savePrimaryCategoryToDB = async (dataPacket) => {

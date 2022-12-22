@@ -57,8 +57,7 @@ const PrimaryCategory = (props: any): JSX.Element => {
     }
   }
 
-  const openPrimaryPane = async () => {
-    console.log('2')
+  const openSubcategoryPane = async () => {
     let obj = await gatherSinglePrimaryCategoryFromDB(
       userObj.auth,
       props.data.id
@@ -69,7 +68,7 @@ const PrimaryCategory = (props: any): JSX.Element => {
     })
     dispatch({
       type: 'OPEN_PRIMARY_PANE',
-      payload: { category: props.data.title },
+      payload: { category: props.data.title, subtitle: props.data.subtitle },
     })
   }
 
@@ -85,29 +84,14 @@ const PrimaryCategory = (props: any): JSX.Element => {
     })
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: true, isEdit: true, editId: props.data.id, title: props.data.title, subtitle: props.data.subtitle },
+      payload: { isAddPrimary: true, isEdit: true, editId: props.data.id, title: props.data.title, subtitle: props.data.subtitle, idChain: props.data.childOfChain },
     })
   }
-
-  // useEffect(() => {
-
-  // }, [])
-
-  // useEffect(() => {
-  //   function namedFunction(e: any) {
-
-  //   }
-  //   window.addEventListener('event', namedFunction)
-
-  //   return function cleanupEvListener() {
-  //     window.removeEventListener('event', namedFunction)
-  //   }
-  // }, [])
 
   return (
     <div
       className='primary-category-container'
-      onClick={openPrimaryPane}
+      onClick={openSubcategoryPane}
       onContextMenu={updateCategory}>
       <button onClick={deleteCategory}>X</button>
       <h4>{props.data.title}</h4>
