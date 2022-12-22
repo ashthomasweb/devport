@@ -140,7 +140,7 @@ export const gatherUserPrimaryCategoriesFromDB = async (userAuth, dispatch) => {
   })
 }
 
-export const gatherSinglePrimaryCategoryFromDB = async (userAuth, dispatch, id) => {
+export const gatherSinglePrimaryCategoryFromDB = async (userAuth, id) => {
   console.log(`Trace: gatherSinglePrimaryCategoryFromDB()`)
   if (!userAuth) return
   let workingObject: any
@@ -157,10 +157,8 @@ export const gatherSinglePrimaryCategoryFromDB = async (userAuth, dispatch, id) 
       workingObject = doc.data()
     }
   })
-  dispatch({
-    type: 'SET_WORKING_OBJECT',
-    payload: { workingObject: workingObject }
-  })
+  return workingObject
+  
   
 }
 

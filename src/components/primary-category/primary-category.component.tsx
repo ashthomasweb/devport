@@ -17,8 +17,7 @@ import React, { useContext, useEffect } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
 
-
-import { 
+import {
   /* Assets */
   /* Database */
   savePrimaryCategoryToDB,
@@ -41,32 +40,58 @@ const PrimaryCategory = (props: any): JSX.Element => {
     globalDispatch,
   } = useContext(GlobalContext)
 
-
-
   const deleteCategory = async (e: any) => {
     if (window.confirm('Are you sure you want to mark as deleted?')) {
-
-    let dataPacket = {
-      ...props.data,
-      deletedAt: new Date().getTime()
+      if (
+        window.confirm(
+          'This will remove all nested entries from file view. Proceed?'
+        )
+      ) {
+        let dataPacket = {
+          ...props.data,
+          deletedAt: new Date().getTime(),
+        }
+        await savePrimaryCategoryToDB(dataPacket)
+        gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+      }
     }
-    await savePrimaryCategoryToDB(dataPacket)
-    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
-  }
   }
 
   const openPrimaryPane = async () => {
     console.log('2')
-    await gatherSinglePrimaryCategoryFromDB(userObj.auth, dispatch, props.data.id)
+    let obj = await gatherSinglePrimaryCategoryFromDB(
+      userObj.auth,
+      props.data.id
+    )
+    dispatch({
+      type: 'SET_WORKING_OBJECT',
+      payload: { workingObject: obj },
+    })
     dispatch({
       type: 'OPEN_PRIMARY_PANE',
-      payload: {category: props.data.title}
+      payload: { category: props.data.title },
+    })
+  }
+
+  const updateCategory = async (e: any) => {
+    e.preventDefault()
+    let obj = await gatherSinglePrimaryCategoryFromDB(
+      userObj.auth,
+      props.data.id
+    )
+    dispatch({
+      type: 'SET_WORKING_OBJECT',
+      payload: { workingObject: obj },
+    })
+    dispatch({
+      type: 'TOG_ADD_PANE',
+      payload: { isAddPrimary: true, isEdit: true, editId: props.data.id, title: props.data.title, subtitle: props.data.subtitle },
     })
   }
 
   // useEffect(() => {
-   
-  // }, [])  
+
+  // }, [])
 
   // useEffect(() => {
   //   function namedFunction(e: any) {
@@ -80,7 +105,10 @@ const PrimaryCategory = (props: any): JSX.Element => {
   // }, [])
 
   return (
-    <div className='primary-category-container' onClick={openPrimaryPane}>
+    <div
+      className='primary-category-container'
+      onClick={openPrimaryPane}
+      onContextMenu={updateCategory}>
       <button onClick={deleteCategory}>X</button>
       <h4>{props.data.title}</h4>
       <p>{props.data.subtitle}</p>

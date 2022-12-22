@@ -51,7 +51,7 @@ import SubCategory from './components/sub-category/sub-category.component'
 /* Initial Assets */
 
 /* Helper Methods */
-import { indexFinder } from './utilities/look-up-methods'
+import { indexFinder, treeSearchAndUpdateInPlace } from './utilities/look-up-methods'
 /* Icons */
 
 /* EXPORTS *********************************************************/
@@ -90,7 +90,7 @@ export {
 /* Initial Assets */
 
 /* Helper Methods */
-export { indexFinder }
+export { indexFinder, treeSearchAndUpdateInPlace }
 /* Icons */
 
 /* END OF DOCUMENT ***********************************************************/

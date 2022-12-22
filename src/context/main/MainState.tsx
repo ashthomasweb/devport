@@ -59,6 +59,8 @@ const initialState = {
     isAddPane: false,
     isUserDropDown: false,
     isAddPrimary: false,
+    isEdit: false,
+    editId: null,
     isPrimaryPaneOpen: false,
     headerHeight: 72,
     subheaderHeight: 95

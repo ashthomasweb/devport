@@ -38,7 +38,12 @@ export const MainReducer = (state: any, action: any) => {
       let display = {
         ...state.display,
         isAddPane: !state.display.isAddPane,
-        isAddPrimary: action.payload.isAddPrimary
+        isAddPrimary: action.payload.isAddPrimary,
+        isEdit: action.payload?.isEdit,
+        editId: action.payload?.editId,
+        idChain: action.payload?.idChain,
+        editTitle: action.payload?.title,
+        editSubtitle: action.payload?.subtitle
       }
       return {
         ...state,

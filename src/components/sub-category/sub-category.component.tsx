@@ -60,23 +60,21 @@ const SubCategory = (props: any): JSX.Element => {
   //   gatherSinglePrimaryCategoryFromDB(userObj.auth, dispatch, props.data.title)
   // }
   
-  // useEffect(() => {
-   
-  // }, [])  
-
-  // useEffect(() => {
-  //   function namedFunction(e: any) {
-
-  //   }
-  //   window.addEventListener('event', namedFunction)
-
-  //   return function cleanupEvListener() {
-  //     window.removeEventListener('event', namedFunction)
-  //   }
-  // }, [])
+  
+  const updateSubcategory = async (e: any) => {
+    e.preventDefault()
+    let obj = await gatherSinglePrimaryCategoryFromDB(
+      userObj.auth,
+      props.data.id
+    )
+    dispatch({
+      type: 'TOG_ADD_PANE',
+      payload: { isAddPrimary: false, isEdit: true, editId: props.data.id, idChain: props.data.childOfChain, title: props.data.title, subtitle: props.data.subtitle },
+    })
+  }
 
   return (
-    <div className='sub-category-container'>
+    <div className='sub-category-container' onContextMenu={updateSubcategory}>
       <button onClick={deleteSubcategory}>X</button>
       <h4>{props.data.title}</h4>
       <p>{props.data.subtitle}</p>
