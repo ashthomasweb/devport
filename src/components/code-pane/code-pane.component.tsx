@@ -12,18 +12,18 @@
 
 ******************************************************************************/
 
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
 
-
-import { 
+import {
   /* Assets */
   /* Database */
   savePrimaryCategoryToDB,
   gatherUserPrimaryCategoriesFromDB,
   /* Helper Functions */
   treeSearchAndUpdateInPlace,
+  indexFinder,
   /* Components */
   /* Icons */
 } from '../../export-hub'
@@ -36,27 +36,33 @@ const CodePane = (props: any): JSX.Element => {
     state: { editorPacket, workingObject },
     dispatch,
   } = useContext(MainContext)
-    const {
-      state: { userObj },
-      globalDispatch,
-    } = useContext(GlobalContext)
+  const {
+    state: { userObj },
+    globalDispatch,
+  } = useContext(GlobalContext)
 
   const fileNameRef: any = useRef(null)
   const fileExtRef: any = useRef(null)
   const fileContentRef: any = useRef(null)
+  const fileTitleRef: any = useRef(null)
+  const fileLanguageRef: any = useRef(null)
+
+  const [editIndex, setEditIndex]: any = useState(null)
+  const [allowEdit, setAllowEdit]: any = useState(null)
 
   interface codePackType {
     title: string
     language: string
     content: string
+    id: number
   }
 
   const newCodeFile = () => {
-
     let obj: codePackType = {
       title: fileNameRef.current.value,
       language: fileExtRef.current.value,
       content: '',
+      id: Math.random() * 10e18,
     }
 
     editorPacket.codePacket.push(obj)
@@ -64,7 +70,6 @@ const CodePane = (props: any): JSX.Element => {
       type: 'SEND_ENTRY_TO_EDITOR',
       payload: { editorPacket: editorPacket },
     })
-
   }
 
   const saveCodeFile = async () => {
@@ -80,43 +85,100 @@ const CodePane = (props: any): JSX.Element => {
     gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
   }
 
-  const updateFileContent = (e: any, index: number) => {
-
-    editorPacket.codePacket[index].content = e.target.value
+  const editFileParams = (index: number) => {
+    setAllowEdit(!allowEdit)
+    setEditIndex(index)
   }
 
-  const onChange = (e:any, value: any) => {
-    console.log(value)
+  const saveFileParams = async (e: any, id: number) => {
+    console.log(e.target.previousSibling.previousSibling.previousSibling)
+    let languageField = e.target.previousSibling.previousSibling.previousSibling
+    let titleField =
+      e.target.previousSibling.previousSibling.previousSibling.previousSibling
+
+    let file = editorPacket.codePacket[indexFinder(editorPacket.codePacket, id)]
+    file.title = titleField.value
+    file.language = languageField.value
+    let newWorkingObject = treeSearchAndUpdateInPlace(
+      workingObject,
+      editorPacket.id,
+      editorPacket.childOfChain,
+      {},
+      false,
+      editorPacket.codePacket
+    )
+    await savePrimaryCategoryToDB(newWorkingObject)
+    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+    setAllowEdit(false)
+  }
+
+  const deleteFile = async (id: number) => {
+    editorPacket.codePacket = editorPacket.codePacket.filter((item) => item.id !== id)
+
+    dispatch({
+      type: 'SEND_ENTRY_TO_EDITOR',
+      payload: { editorPacket: editorPacket },
+    })
+    let newWorkingObject = treeSearchAndUpdateInPlace(
+      workingObject,
+      editorPacket.id,
+      editorPacket.childOfChain,
+      {},
+      false,
+      editorPacket.codePacket
+    )
+    await savePrimaryCategoryToDB(newWorkingObject)
+    gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+    setAllowEdit(false)
+  }
+
+  let inputStyle: any = {
+    border: `${allowEdit ? '1px solid lightgreen' : '1px solid lightgrey'}`,
+    pointerEvents: `${allowEdit ? 'all' : 'none'}`,
+    margin: '0 2px 3px 0',
   }
 
   return (
     <div className='code-pane'>
       {editorPacket.title}
       <br />
-      {editorPacket.subtitle}<br/>
+      {editorPacket.subtitle}
+      <br />
       <input ref={fileNameRef} placeholder='filename.ext' type='text'></input>
       <input ref={fileExtRef} placeholder='language' type='text'></input>
       <button onClick={saveCodeFile}>Save To Entry</button>
       <button onClick={newCodeFile}>New File</button>
 
-      {editorPacket.codePacket.map((file: any, index: number) => {
+      {editorPacket.codePacket.length >= 1 && editorPacket?.codePacket.map((file: any, index: number) => {
         return (
           <div key={index} className='code-window'>
             <div>
-              <h4>{file.title}</h4>
+              <input
+                ref={fileTitleRef}
+                style={inputStyle}
+                type='text'
+                defaultValue={file.title}></input>
+              <input
+                ref={fileLanguageRef}
+                style={inputStyle}
+                type='text'
+                defaultValue={file.language}></input>
+              <button onClick={() => editFileParams(index)}>{`${
+                allowEdit ? 'Cancel' : 'Edit'
+              }`}</button>
+
+              <button onClick={() => deleteFile(file.id)}>Delete</button>
+              {allowEdit && (
+                <button onClick={(e) => saveFileParams(e, file.id)}>
+                  Save
+                </button>
+              )}
             </div>
-            {/* <AceEditor
-              mode='javascript'
-              theme='github'
-              onChange={onChange}
-              editorProps={{ $blockScrolling: true }}
-              ></AceEditor> */}
-              <AceWindow id={index} codeContent={file.content} language={fileExtRef.current?.value}/>
-            {/* <textarea
-              className='code-area'
-              ref={fileContentRef}
-              defaultValue={file.content}
-              onChange={onChange}></textarea> */}
+            <AceWindow
+              id={index}
+              codeContent={file.content}
+              language={file.language}
+            />
           </div>
         )
       })}

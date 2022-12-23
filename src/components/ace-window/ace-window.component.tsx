@@ -29,7 +29,7 @@ import './ace-window.styles.scss'
 
 const AceWindow = (props: any): JSX.Element => {
   const {
-    state: { aceObj },
+    state: { aceObj, editorPacket },
     dispatch,
   } = useContext(MainContext)
 
@@ -84,6 +84,7 @@ const AceWindow = (props: any): JSX.Element => {
     var editor = Ace.edit(`editor ${props.id}`)
     editor.setTheme('ace/theme/chaos')
     function setEditor() {
+      editor.setValue('')
       // editor.session.setMode('ace/mode/javascript')
       // editor.session.setMode('ace/mode/terraform')
       editor.session.setMode(`ace/mode/${props.language}`)
@@ -212,12 +213,22 @@ const AceWindow = (props: any): JSX.Element => {
   //   }
   // }, [Ace, props.id, dispatch])
 
-
+  
+  const updateFileContent = (e: any, index: number) => {
+    var editor = Ace.edit(`editor ${props.id}`)
+    let newCodeContent = editor.getValue()
+      console.log(newCodeContent)
+      editorPacket.codePacket[index].content = newCodeContent
+      // dispatch({
+      //   type: 'SEND_ENTRY_TO_EDITOR',
+      //   payload: { editorPacket: editorPacket },
+      // })
+    }
 
   return (
     <div
       id={`editor ${props.id}`}
-      // onBlur={callbackSave}
+      onInput={(e) => updateFileContent(e, props.id)} // props.id is the index of parent
       ref={currentEditor}
     />
   )
