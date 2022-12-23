@@ -209,7 +209,7 @@ export const MainReducer = (state: any, action: any) => {
     case 'SEND_ENTRY_TO_EDITOR': {
       console.log(action.payload)
       let editorPacket = {
-        ...action.payload.editorPacket
+        ...action.payload.editorPacket,
       }
       return {
         ...state,
@@ -217,6 +217,13 @@ export const MainReducer = (state: any, action: any) => {
       }
     }
 
+    case 'SET_ACE': {
+      // console.log(`Trace: SET_ACE()`)
+      return {
+        ...state,
+        aceObj: action.payload.aceObj,
+      }
+    }
     case 'OPEN_CODE_PANE': {
       let display = {
         ...state.display,

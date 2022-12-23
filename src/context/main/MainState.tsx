@@ -35,6 +35,7 @@ interface initialStateType {
   primaryCategories: any[]
   workingObject: any
   editorPacket: any
+  aceObj: any
 }
 
 // interface entryType {
@@ -70,7 +71,8 @@ const initialState = {
   primaryCategories: [
   ],
   workingObject: {},
-  editorPacket: {}
+  editorPacket: {},
+  aceObj: null
 }
 
 export const MainContext = createContext<{

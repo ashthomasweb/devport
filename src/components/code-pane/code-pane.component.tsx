@@ -12,9 +12,10 @@
 
 ******************************************************************************/
 
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
+
 
 import { 
   /* Assets */
@@ -28,6 +29,7 @@ import {
 } from '../../export-hub'
 
 import './code-pane.styles.scss'
+import AceWindow from '../ace-window/ace-window.component'
 
 const CodePane = (props: any): JSX.Element => {
   const {
@@ -43,11 +45,9 @@ const CodePane = (props: any): JSX.Element => {
   const fileExtRef: any = useRef(null)
   const fileContentRef: any = useRef(null)
 
-
-
   interface codePackType {
     title: string
-    languageExt: string
+    language: string
     content: string
   }
 
@@ -55,7 +55,7 @@ const CodePane = (props: any): JSX.Element => {
 
     let obj: codePackType = {
       title: fileNameRef.current.value,
-      languageExt: fileExtRef.current.value,
+      language: fileExtRef.current.value,
       content: '',
     }
 
@@ -81,7 +81,12 @@ const CodePane = (props: any): JSX.Element => {
   }
 
   const updateFileContent = (e: any, index: number) => {
+
     editorPacket.codePacket[index].content = e.target.value
+  }
+
+  const onChange = (e:any, value: any) => {
+    console.log(value)
   }
 
   return (
@@ -90,7 +95,7 @@ const CodePane = (props: any): JSX.Element => {
       <br />
       {editorPacket.subtitle}<br/>
       <input ref={fileNameRef} placeholder='filename.ext' type='text'></input>
-      <input ref={fileExtRef} placeholder='Extension only' type='text'></input>
+      <input ref={fileExtRef} placeholder='language' type='text'></input>
       <button onClick={saveCodeFile}>Save To Entry</button>
       <button onClick={newCodeFile}>New File</button>
 
@@ -100,10 +105,18 @@ const CodePane = (props: any): JSX.Element => {
             <div>
               <h4>{file.title}</h4>
             </div>
-            <textarea
+            {/* <AceEditor
+              mode='javascript'
+              theme='github'
+              onChange={onChange}
+              editorProps={{ $blockScrolling: true }}
+              ></AceEditor> */}
+              <AceWindow id={index} codeContent={file.content} language={fileExtRef.current?.value}/>
+            {/* <textarea
+              className='code-area'
               ref={fileContentRef}
               defaultValue={file.content}
-              onChange={(e: any) => updateFileContent(e, index)}></textarea>
+              onChange={onChange}></textarea> */}
           </div>
         )
       })}

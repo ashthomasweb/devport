@@ -13,7 +13,6 @@ import {
   DisplayPane,
   /* Icons */
 } from './export-hub.js'
-import { user } from 'firebase-functions/v1/auth'
 
 const App = (props: any): JSX.Element => {
   const {
@@ -24,6 +23,20 @@ const App = (props: any): JSX.Element => {
     state: { userObj },
     globalDispatch,
   } = useContext(GlobalContext)
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - Request for 'ace' object comes from cdn, therefore not available for the typecheck on compilation - no actual functional error
+    if (window.ace) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore - Request for 'ace' object comes from cdn, therefore not available for the typecheck on compilation - no actual functional error
+      let editor = window.ace
+      dispatch({
+        type: 'SET_ACE',
+        payload: { aceObj: editor },
+      })
+    }
+  }, [dispatch])
 
   let userAuth = getAuth()
   useEffect(() => {
