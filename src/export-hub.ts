@@ -47,6 +47,10 @@ import PaneContainer from './components/pane-container/pane-container.component'
 import SubCategory from './components/sub-category/sub-category.component'
 import SubSubcategoryPane from './components/subsubcategory-pane/subsubcategory-pane.component'
 import FinalPane from './components/final-pane/final-pane.component'
+import CodePane from './components/code-pane/code-pane.component'
+
+
+
 /* Mapped Assets */
 
 /* Initial Assets */
@@ -85,7 +89,8 @@ export {
   PaneContainer,
   SubCategory,
   SubSubcategoryPane,
-  FinalPane
+  FinalPane,
+  CodePane,
 }
 
 /* Mapped Assets */

@@ -59,6 +59,9 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
     dispatch({
       type: 'TOG_SUBSUBCAT_PANE',
     })
+    dispatch({
+      type: 'CLOSE_FINAL_PANE',
+    })
   }
 
   const addItem = (e: any) => {

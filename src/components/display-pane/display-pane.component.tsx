@@ -30,7 +30,8 @@ import {
   SubcategoryPane,
   SubSubcategoryPane,
   PaneContainer,
-  FinalPane
+  FinalPane,
+  CodePane
   /* Icons */
 } from '../../export-hub'
 
@@ -53,6 +54,7 @@ const DisplayPane = (props: any): JSX.Element => {
         {display.isSubSubcategoryPaneOpen && <SubSubcategoryPane />}
         {display.isFinalPaneOpen && <FinalPane />}
       </PaneContainer>
+      {display.isCodePaneOpen && <CodePane />}
 
       {display.isAddPane && <AddPane />}
     </div>

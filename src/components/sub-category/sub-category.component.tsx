@@ -12,11 +12,11 @@
 
 ******************************************************************************/
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
 
-import { 
+import {
   /* Assets */
   /* Database */
   savePrimaryCategoryToDB,
@@ -24,6 +24,7 @@ import {
   gatherSinglePrimaryCategoryFromDB,
   /* Helper Functions */
   indexFinder,
+  treeSearchAndUpdateInPlace,
   /* Components */
   /* Icons */
 } from '../../export-hub'
@@ -32,7 +33,7 @@ import './sub-category.styles.scss'
 
 const SubCategory = (props: any): JSX.Element => {
   const {
-    state: { workingObject},
+    state: { workingObject, display },
     dispatch,
   } = useContext(MainContext)
   const {
@@ -40,17 +41,33 @@ const SubCategory = (props: any): JSX.Element => {
     globalDispatch,
   } = useContext(GlobalContext)
 
+  let [isCodeVisible, setIsCodeVisible]: any = useState(false)
+
   const deleteSubcategory = async (e: any) => {
+    e.preventDefault()
     if (window.confirm('Are you sure you want to mark as deleted?')) {
-      let obj = workingObject.entries[indexFinder(workingObject.entries, props.data.id)]
-      obj.deletedAt = new Date().getTime()
-      await savePrimaryCategoryToDB(workingObject)
+      let newWorkingObject = treeSearchAndUpdateInPlace(
+        workingObject,
+        props.data.id,
+        props.data.childOfChain,
+        {},
+        true
+      )
+
+      await savePrimaryCategoryToDB(newWorkingObject)
       gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
+      if (props.pane === 'subsub') {
+        dispatch({
+          type: 'CLOSE_FINAL_PANE',
+        })
+      }
+      if (props.pane === 'sub') {
+        dispatch({
+          type: 'CLOSE_SUBSUBCAT_PANE',
+        })
+      }
     }
   }
-
-
-
 
   // const openSubcategoryPane = async () => {
   //   dispatch({
@@ -59,15 +76,19 @@ const SubCategory = (props: any): JSX.Element => {
   //   })
   //   gatherSinglePrimaryCategoryFromDB(userObj.auth, dispatch, props.data.title)
   // }
-  
+
   const openPane = () => {
     if (props.pane === 'sub') {
       dispatch({
         type: 'SET_CURRENT_PARENT_ID',
-        payload: { id: props.data.id, title: props.data.title, subtitle: props.data.subtitle }
+        payload: {
+          id: props.data.id,
+          title: props.data.title,
+          subtitle: props.data.subtitle,
+        },
       })
       dispatch({
-        type: 'TOG_SUBSUBCAT_PANE',
+        type: 'OPEN_SUBSUBCAT_PANE',
       })
     } else if (props.pane === 'subsub') {
       dispatch({
@@ -78,13 +99,11 @@ const SubCategory = (props: any): JSX.Element => {
           subtitle: props.data.subtitle,
         },
       })
-         dispatch({
-           type: 'TOG_FINAL_PANE',
-         })
+      dispatch({
+        type: 'OPEN_FINAL_PANE',
+      })
     }
   }
-
-
 
   const updateSubcategory = async (e: any) => {
     e.preventDefault()
@@ -94,15 +113,40 @@ const SubCategory = (props: any): JSX.Element => {
     )
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: false, isEdit: true, editId: props.data.id, idChain: props.data.childOfChain, title: props.data.title, subtitle: props.data.subtitle },
+      payload: {
+        isAddPrimary: false,
+        isEdit: true,
+        editId: props.data.id,
+        idChain: props.data.childOfChain,
+        title: props.data.title,
+        subtitle: props.data.subtitle,
+      },
+    })
+  }
+
+  const openCodePane = (e: any) => {
+    e.stopPropagation()
+
+    dispatch({
+      type: 'SEND_ENTRY_TO_EDITOR',
+      payload: { editorPacket: props.data },
+    })
+    dispatch({
+      type: 'OPEN_CODE_PANE'
     })
   }
 
   return (
-    <div className='sub-category-container' onContextMenu={updateSubcategory} onClick={openPane}>
+    <div
+      className='sub-category-container'
+      onContextMenu={updateSubcategory}
+      onClick={openPane}>
       <button onClick={deleteSubcategory}>X</button>
+      <button style={{top: 5, backgroundColor: 'green'}} onClick={openCodePane}>{`<>`}</button>
+
       <h4>{props.data.title}</h4>
       <p>{props.data.subtitle}</p>
+
     </div>
   )
 }

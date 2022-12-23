@@ -81,7 +81,9 @@ export const MainReducer = (state: any, action: any) => {
         ...state.display,
         isSubcategoryPaneOpen: true,
         currentPrimary: action.payload?.category,
-        currentPrimarySubtitle: action.payload?.subtitle
+        currentPrimarySubtitle: action.payload?.subtitle,
+        isSubSubcategoryPaneOpen: false,
+        isFinalPaneOpen: false,
       }
       return {
         ...state,
@@ -93,6 +95,29 @@ export const MainReducer = (state: any, action: any) => {
       let display = {
         ...state.display,
         isSubcategoryPaneOpen: !state.display.isSubcategoryPaneOpen,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+    case 'CLOSE_SUBCAT_PANE': {
+      let display = {
+        ...state.display,
+        isSubcategoryPaneOpen: false,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'OPEN_SUBSUBCAT_PANE': {
+      let display = {
+        ...state.display,
+        isSubcategoryPaneOpen: true,
+        isSubSubcategoryPaneOpen: true,
+        isFinalPaneOpen: false,
       }
       return {
         ...state,
@@ -111,10 +136,43 @@ export const MainReducer = (state: any, action: any) => {
       }
     }
 
+    case 'CLOSE_SUBSUBCAT_PANE': {
+      let display = {
+        ...state.display,
+        isSubSubcategoryPaneOpen: false,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
     case 'TOG_FINAL_PANE': {
       let display = {
         ...state.display,
         isFinalPaneOpen: !state.display.isFinalPaneOpen,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'OPEN_FINAL_PANE': {
+      let display = {
+        ...state.display,
+        isFinalPaneOpen: true,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'CLOSE_FINAL_PANE': {
+      let display = {
+        ...state.display,
+        isFinalPaneOpen: false,
       }
       return {
         ...state,
@@ -141,6 +199,28 @@ export const MainReducer = (state: any, action: any) => {
         finalPaneParentId: action.payload.id,
         finalPaneParentTitle: action.payload.title,
         finalPaneParentSubtitle: action.payload.subtitle,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'SEND_ENTRY_TO_EDITOR': {
+      console.log(action.payload)
+      let editorPacket = {
+        ...action.payload.editorPacket
+      }
+      return {
+        ...state,
+        editorPacket: editorPacket,
+      }
+    }
+
+    case 'OPEN_CODE_PANE': {
+      let display = {
+        ...state.display,
+        isCodePaneOpen: true,
       }
       return {
         ...state,

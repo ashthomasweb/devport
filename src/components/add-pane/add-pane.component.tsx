@@ -55,11 +55,7 @@ export const newEntry: entryType = {
   codePacket: [],
 }
 
-interface codePackType {
-  title: string
-  languageExt: string
-  content: string
-}
+
 
 const AddPane = (props: any): JSX.Element => {
   const {

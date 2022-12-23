@@ -1,0 +1,50 @@
+.code-pane {
+  width: 700px;
+  height: 882px;
+  right: 0;
+  position: absolute;
+  bottom: 0;
+  background-color: #262626;
+  border: 4px solid green;
+  margin: 5px 0;
+  padding: 10px;
+  overflow: scroll;
+
+  button {
+    height: 40px;
+    border-radius: 0;
+    float: right;
+    height: 24px;
+    line-height: 1;
+    font-size: 12px;
+    margin: 0 0 0 2px;
+  }
+
+  input {
+    height: 24px;
+  }
+
+  h4 {
+    margin: 5px 0;
+  }
+  
+
+  .code-window {
+    position: relative;
+    border: 2px solid grey;
+    width: 100%;
+    height: auto;
+    resize: vertical;
+    background-color: #303030;
+    padding: 4px;
+
+    margin: 5px 0 0 0;
+
+    textarea {
+        width: 100%;
+        height: 71%;
+        resize: vertical;
+        min-height: 160px;
+    }
+  }
+}

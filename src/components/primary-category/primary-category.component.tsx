@@ -41,12 +41,25 @@ const PrimaryCategory = (props: any): JSX.Element => {
   } = useContext(GlobalContext)
 
   const deleteCategory = async (e: any) => {
+    e.stopPropagation()
+
+    dispatch({
+      type: 'CLOSE_SUBCAT_PANE',
+    })
+    dispatch({
+      type: 'CLOSE_SUBSUBCAT_PANE',
+    })
+    dispatch({
+      type: 'CLOSE_FINAL_PANE',
+    })
+
     if (window.confirm('Are you sure you want to mark as deleted?')) {
       if (
         window.confirm(
           'This will remove all nested entries from file view. Proceed?'
         )
       ) {
+
         let dataPacket = {
           ...props.data,
           deletedAt: new Date().getTime(),
@@ -57,7 +70,7 @@ const PrimaryCategory = (props: any): JSX.Element => {
     }
   }
 
-  const openSubcategoryPane = async () => {
+  const openSubcategoryPane = async (e: any) => {
     let obj = await gatherSinglePrimaryCategoryFromDB(
       userObj.auth,
       props.data.id

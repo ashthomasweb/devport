@@ -34,6 +34,7 @@ interface initialStateType {
   display: any
   primaryCategories: any[]
   workingObject: any
+  editorPacket: any
 }
 
 // interface entryType {
@@ -63,11 +64,13 @@ const initialState = {
     editId: null,
     isSubcategoryPaneOpen: false,
     headerHeight: 72,
-    subheaderHeight: 95
+    subheaderHeight: 95,
+    isCodePaneOpen: false
   },
   primaryCategories: [
   ],
-  workingObject: {}
+  workingObject: {},
+  editorPacket: {}
 }
 
 export const MainContext = createContext<{
