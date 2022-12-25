@@ -48,7 +48,7 @@ const FinalPane = (props: any): JSX.Element => {
   }
 
   return (
-    <div className='final-pane-container'>
+    <div className='final-pane-container' onDoubleClick={addItem}>
       {display.finalPaneParentTitle}<br/>
       {display.finalPaneParentSubtitle}
 

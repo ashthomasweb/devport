@@ -72,7 +72,7 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
   }
 
   return (
-    <div className='subsubcategory-pane-container'>
+    <div className='subsubcategory-pane-container' onDoubleClick={addItem}>
       {display.currentPaneParentTitle}
       <br />
       {display.currentPaneParentSubtitle}

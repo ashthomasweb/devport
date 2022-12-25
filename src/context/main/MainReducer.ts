@@ -224,10 +224,22 @@ export const MainReducer = (state: any, action: any) => {
         aceObj: action.payload.aceObj,
       }
     }
+
     case 'OPEN_CODE_PANE': {
       let display = {
         ...state.display,
         isCodePaneOpen: true,
+      }
+      return {
+        ...state,
+        display: display,
+      }
+    }
+
+    case 'TOG_CODE_PANE': {
+      let display = {
+        ...state.display,
+        isCodePaneOpen: !state.display.isCodePaneOpen,
       }
       return {
         ...state,

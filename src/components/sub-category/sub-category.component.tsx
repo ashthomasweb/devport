@@ -33,7 +33,7 @@ import './sub-category.styles.scss'
 
 const SubCategory = (props: any): JSX.Element => {
   const {
-    state: { workingObject, display },
+    state: { workingObject, display, editorPacket },
     dispatch,
   } = useContext(MainContext)
   const {
@@ -132,21 +132,50 @@ const SubCategory = (props: any): JSX.Element => {
       payload: { editorPacket: props.data },
     })
     dispatch({
-      type: 'OPEN_CODE_PANE'
+      type: 'TOG_CODE_PANE',
     })
+  }
+
+  const clickHandler = (e: any) => {
+    props.data.codePacket.length > 0 ? openCodePane(e) : openPane()
   }
 
   return (
     <div
       className='sub-category-container'
+      style={{
+        backgroundColor: `${props.data.codePacket.length > 0 ? '#3f5e67' : props.data.entries.length > 0 ? '#2d2d32' : '#444444'}`,
+        outline: `${
+          display.isCodePaneOpen && editorPacket?.id === props.data.id
+            ? '4px solid green'
+            : 'none'
+        }`,
+        border: `${props.data.codePacket.length > 0 && 'none'}`,
+      }}
       onContextMenu={updateSubcategory}
-      onClick={openPane}>
+      onClick={clickHandler}>
       <button onClick={deleteSubcategory}>X</button>
-      <button style={{top: 5, backgroundColor: 'green'}} onClick={openCodePane}>{`<>`}</button>
+      {props.data.entries.length === 0 && (
+
+        <button
+        style={{
+          top: 5,
+          backgroundColor: `${
+            props.data.codePacket.length > 0
+            ? display.isCodePaneOpen && editorPacket?.id === props.data.id
+            ? 'green'
+            : 'blue'
+            : display.isCodePaneOpen && editorPacket?.id === props.data.id
+            ? 'green'
+            : 'grey'
+          }`,
+        }}
+        onClick={openCodePane}>{`<>`}</button>
+        )
+      }
 
       <h4>{props.data.title}</h4>
       <p>{props.data.subtitle}</p>
-
     </div>
   )
 }

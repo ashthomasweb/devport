@@ -71,14 +71,23 @@ const SubcategoryPane = (props: any): JSX.Element => {
       payload: { isAddPrimary: false },
     })
   }
-
+  let renderArray
+    
+    let folderArray = workingObject.entries.filter((entry:any) => entry.entries.length > 0)
+    let codeEntry = workingObject.entries.filter((entry: any) => entry.codePacket.length > 0)
+    let unknownEntryType = workingObject.entries.filter(
+      (entry: any) => (entry.codePacket.length === 0) && (entry.entries.length === 0)
+      )
+      
+  renderArray = [...folderArray, ...unknownEntryType, ...codeEntry]
+  
   return (
-    <div className='subcategory-pane-container'>
+    <div className='subcategory-pane-container' onDoubleClick={addItem}>
       {display.currentPrimary}
       <br />
       {display.currentPrimarySubtitle}
 
-      {workingObject?.entries.map((entry: any, index: number) => {
+      {renderArray?.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
           return <SubCategory key={index} data={entry} pane='sub' />
         } else return

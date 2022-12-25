@@ -138,9 +138,15 @@ const CodePane = (props: any): JSX.Element => {
     margin: '0 2px 3px 0',
   }
 
+  const closeCodePane = () => {
+    dispatch({
+      type: 'TOG_CODE_PANE'
+    })
+  }
+
   return (
     <div className='code-pane'>
-      {editorPacket.title}
+      {editorPacket.title}<button style={{position: 'absolute', right: 0}}onClick={closeCodePane}>Close</button>
       <br />
       {editorPacket.subtitle}
       <br />
