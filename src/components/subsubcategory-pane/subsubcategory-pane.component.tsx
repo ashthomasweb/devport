@@ -67,16 +67,14 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
   const addItem = (e: any) => {
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: false },
+      payload: { isAddPrimary: false, category: 'subsub' },
     })
   }
 
   return (
     <div className='subsubcategory-pane-container' onDoubleClick={addItem}>
-      {display.currentPaneParentTitle}
-      <br />
-      {display.currentPaneParentSubtitle}
-
+      <h3>{display.currentPaneParentTitle}</h3>
+      <p>{display.currentPaneParentSubtitle}</p>
       {workingObject?.entries[
         indexFinder(workingObject.entries, display.currentPaneParentId)
       ].entries.map((entry: any, index: number) => {

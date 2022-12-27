@@ -39,7 +39,7 @@ const PaneContainer = (props: any): JSX.Element => {
 
 
   return (
-    <div className='pane-container' style={{height: `calc(100vh - ${display.headerHeight + display.subheaderHeight}px)`}}>
+    <div className='pane-container' style={{height: `calc(100vh - ${display.headerHeight + display.subheaderHeight + 10}px)`}}>
       <div className='inner-wrapper'>
         {props.children}
 

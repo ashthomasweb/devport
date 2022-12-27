@@ -79,14 +79,15 @@ const SignInUp = () => {
 
   return (
     <div className='sign-in'>
-      <h2 className='title'>Create a Free Account</h2>
+      <h2 className='title'>Welcome to CodeStasher</h2>
       <span>
-        Welcome to DevPort. Save your code.<br/>Organize your process.
+        Save your code.
+        <br />
+        Organize your process.
       </span>
       <button
-        type='button'
-        onClick={firebaseSignIn}
-        className='google-sign-in custom-button'>
+        // type='button'
+        onClick={firebaseSignIn}>
         Sign Up With Google
       </button>
     </div>

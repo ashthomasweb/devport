@@ -33,25 +33,6 @@ const SubcategoryPane = (props: any): JSX.Element => {
     dispatch,
   } = useContext(MainContext)
 
-  // const myFunction = (e: any) => {
-
-  // }
-
-  // useEffect(() => {
-
-  // }, [])
-
-  // useEffect(() => {
-  //   function namedFunction(e: any) {
-
-  //   }
-  //   window.addEventListener('event', namedFunction)
-
-  //   return function cleanupEvListener() {
-  //     window.removeEventListener('event', namedFunction)
-  //   }
-  // }, [])
-
   
   const closePane = (e: any) => {
     dispatch({
@@ -68,7 +49,7 @@ const SubcategoryPane = (props: any): JSX.Element => {
   const addItem = (e: any) => {
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: false },
+      payload: { isAddPrimary: false, category: 'sub' },
     })
   }
   let renderArray
@@ -83,9 +64,8 @@ const SubcategoryPane = (props: any): JSX.Element => {
   
   return (
     <div className='subcategory-pane-container' onDoubleClick={addItem}>
-      {display.currentPrimary}
-      <br />
-      {display.currentPrimarySubtitle}
+      <h3>{display.currentPrimary}</h3>
+      <p>{display.currentPrimarySubtitle}</p>
 
       {renderArray?.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
@@ -95,7 +75,7 @@ const SubcategoryPane = (props: any): JSX.Element => {
       <button onClick={closePane}>X</button>
       <button
         onClick={addItem}
-        style={{ right: `30px`, backgroundColor: 'lightgreen' }}>
+        style={{ right: `30px`, backgroundColor: 'lightgreen', color: 'black' }}>
         +
       </button>
     </div>
@@ -105,3 +85,4 @@ const SubcategoryPane = (props: any): JSX.Element => {
 export default SubcategoryPane
 
 /* END of document ***********************************************************/
+

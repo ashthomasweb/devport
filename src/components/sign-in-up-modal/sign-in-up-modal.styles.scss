@@ -14,14 +14,20 @@
 * Usage Rights: Not for public use or redistribution.
 
 ******************************************************************************/
-/* END of document ***********************************************************/
 
 .sign-in-and-sign-up {
     display: flex;
     justify-content: center;
     margin: 10px auto;
-    background-color: #222;
-    padding: 30px 10px 20px;
+    background-color: #000;
+    padding: 10px 10px;
     z-index: 2147483647;
     color: white;
+
+    button {
+        padding: 6px 14px;
+    };
+
 }
+
+/* END of document ***********************************************************/

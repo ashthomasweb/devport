@@ -96,6 +96,10 @@ const AceWindow = (props: any): JSX.Element => {
       })
       // console.log('set')
       editor.session.insert({ row: 1, column: 0 }, props.codeContent)
+      if (props.codeContent === '') {
+      editor.setValue('\r\r\r\r')
+      }
+      // editor.focus()
     // if (props.resourceFileNameId.includes('config') && isFirstOpen) {
     //   // dispatch({ type: 'MAKE_CODEFILE_ACTIVE', payload: { activeFileId: props.resourceFileNameId } })
     // }
@@ -104,6 +108,7 @@ const AceWindow = (props: any): JSX.Element => {
     // langTools.setCompleters([staticKeyWordCompleter])
 
     setEditor()
+
   }, [
     props.id,
     Ace,
@@ -217,7 +222,6 @@ const AceWindow = (props: any): JSX.Element => {
   const updateFileContent = (e: any, index: number) => {
     var editor = Ace.edit(`editor ${props.id}`)
     let newCodeContent = editor.getValue()
-      console.log(newCodeContent)
       editorPacket.codePacket[index].content = newCodeContent
       // dispatch({
       //   type: 'SEND_ENTRY_TO_EDITOR',

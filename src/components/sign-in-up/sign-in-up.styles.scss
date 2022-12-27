@@ -15,16 +15,17 @@
 ******************************************************************************/
 
 .sign-in {
-  width: 380px;
+  width: 400px;
   display: inline-flex;
   flex-direction: column;
   // outline: 200px solid white;
 
 
+
   span {
     text-align: center;
 
-    font-family: proxima-nova, sans-serif;
+    font-family: var(--font-monospace);
     font-size: 14px;
     font-weight: 700;
     line-height: 18.2px;
@@ -32,7 +33,7 @@
 
   h2 {
     text-align: center;
-    font-family: proxima-nova, sans-serif;
+    font-family: var(--font-monospace);
     font-size: 30px;
     font-weight: 800;
     line-height: 39px;
@@ -49,21 +50,22 @@
   }
 
   button {
-    font-family: proxima-nova, sans-serif;
+    font-family: var(--font-monospace);
     font-size: 18px;
     font-weight: 700;
-    line-height: 21.6px;
-    width: 336px;
+    line-height: 1.2;
+    width: 286px;
     height: 46px;
     color: white;
     border-radius: 12px;
-    border: none;
-    background-color: black;
+    // border: none;
+    background-color: #1e1e1e;
     cursor: pointer;
     left: 50%;
     transform: translateX(-50%);
     position: relative;
     margin: 20px 0;
+    padding: 0;
   }
 }
 

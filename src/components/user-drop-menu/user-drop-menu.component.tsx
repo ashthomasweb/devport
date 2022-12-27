@@ -36,9 +36,9 @@ const UserDropMenu = (props: any): JSX.Element => {
   const { globalDispatch } = useContext(GlobalContext)
 
 
-  function accountSettings() {
-    alert('Open Account Settings Pane')
-  }
+  // function accountSettings() {
+  //   alert('Open Account Settings Pane')
+  // }
 
   function signOutHandler() {
     const auth = getAuth()
@@ -50,12 +50,12 @@ const UserDropMenu = (props: any): JSX.Element => {
 
   return (
     <div className='user-drop-menu'>
-      <button
+      {/* <button
         className='drop-item drop-down-button'
         type='button'
         onClick={accountSettings}>
         Account Settings
-      </button>
+      </button> */}
       <button
         className='drop-item drop-down-button'
         type='button'

@@ -40,7 +40,7 @@ const SignInUpModal = () => {
   return (
     <div className='sign-in-and-sign-up'>
       <button
-        style={{ position: 'absolute', top: '10px', right: '10px', color: 'white', fontSize: '14px', height: 30 }}
+        style={{ position: 'absolute', top: '10px', right: '10px', color: 'white', fontSize: '14px', height: 30, lineHeight: 1.2 }}
         type='button'
         onClick={modalToggle}>
         Close

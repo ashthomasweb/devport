@@ -13,7 +13,7 @@
 
 ******************************************************************************/
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
 
@@ -32,13 +32,35 @@ import './primary-category.styles.scss'
 
 const PrimaryCategory = (props: any): JSX.Element => {
   const {
-    state: { workingObject },
+    state: { workingObject, display },
     dispatch,
   } = useContext(MainContext)
   const {
     state: { userObj },
     globalDispatch,
   } = useContext(GlobalContext)
+
+  let [activeBorder, setActiveBorder]: any = useState(false)
+  let [borderSwitch, setBorderSwitch]: any = useState(false)
+
+  const clickHandler = (e: any) => {
+    setBorderSwitch(!borderSwitch)
+    // props.data.codePacket.length > 0 ? openCodePane(e) : openPane()
+  }
+
+  useEffect(() => {
+      if (
+        workingObject.id === props.data.id &&
+        display.isSubcategoryPaneOpen
+      ) {
+        setActiveBorder(true)
+      } else {
+        setActiveBorder(false)
+      }
+      if (display.isSubcategoryPaneOpen === false) {
+        setActiveBorder(false)
+      }
+  }, [workingObject, borderSwitch, display.isSubcategoryPaneOpen])
 
   const deleteCategory = async (e: any) => {
     e.stopPropagation()
@@ -59,7 +81,6 @@ const PrimaryCategory = (props: any): JSX.Element => {
           'This will remove all nested entries from file view. Proceed?'
         )
       ) {
-
         let dataPacket = {
           ...props.data,
           deletedAt: new Date().getTime(),
@@ -71,6 +92,8 @@ const PrimaryCategory = (props: any): JSX.Element => {
   }
 
   const openSubcategoryPane = async (e: any) => {
+    setBorderSwitch(!borderSwitch)
+
     let obj = await gatherSinglePrimaryCategoryFromDB(
       userObj.auth,
       props.data.id
@@ -83,6 +106,11 @@ const PrimaryCategory = (props: any): JSX.Element => {
       type: 'OPEN_PRIMARY_PANE',
       payload: { category: props.data.title, subtitle: props.data.subtitle },
     })
+    if (display.isSubcategoryPaneOpen && display.currentPrimaryId === props.data.id) {
+      dispatch({
+        type: 'CLOSE_SUBCAT_PANE'
+      })
+    }
   }
 
   const updateCategory = async (e: any) => {
@@ -97,13 +125,26 @@ const PrimaryCategory = (props: any): JSX.Element => {
     })
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: true, isEdit: true, editId: props.data.id, title: props.data.title, subtitle: props.data.subtitle, idChain: props.data.childOfChain },
+      payload: {
+        isAddPrimary: true,
+        isEdit: true,
+        editId: props.data.id,
+        currentPrimaryId: props.data.id,
+        title: props.data.title,
+        subtitle: props.data.subtitle,
+        idChain: props.data.childOfChain,
+        category: 'primary',
+      },
     })
   }
 
   return (
     <div
       className='primary-category-container'
+      style={{
+        outline: `${activeBorder ? '2px solid #4c4c84' : 'inherit'}`,
+        backgroundColor: `${activeBorder ? '#1e1e1e' : '#252525'}`,
+      }}
       onClick={openSubcategoryPane}
       onContextMenu={updateCategory}>
       <button onClick={deleteCategory}>X</button>

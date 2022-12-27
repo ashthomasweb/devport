@@ -41,7 +41,7 @@ const SubHeader = (props: any): JSX.Element => {
   const toggleAddPane = () => {
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: true }
+      payload: { isAddPrimary: true, category: 'primary' }
     })
   }
 

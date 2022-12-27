@@ -13,7 +13,7 @@
 
 ******************************************************************************/
 
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
 import cloneDeep from 'lodash.clonedeep'
@@ -55,8 +55,6 @@ export const newEntry: entryType = {
   codePacket: [],
 }
 
-
-
 const AddPane = (props: any): JSX.Element => {
   const {
     state: { display, workingObject },
@@ -67,10 +65,12 @@ const AddPane = (props: any): JSX.Element => {
     globalDispatch,
   } = useContext(GlobalContext)
 
+  let [lengthAlert, setLengthAlert]: any = useState(false)
+
   const closePane = () => {
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: true },
+      payload: { isAddPrimary: true, category: null },
     })
   }
 
@@ -95,7 +95,7 @@ const AddPane = (props: any): JSX.Element => {
     })
     savePrimaryCategoryToDB(dataPacket)
   }
-  
+
   const editPrimaryCat = async (e: any) => {
     let dataPack = {
       title: primaryRef.current.value,
@@ -129,7 +129,6 @@ const AddPane = (props: any): JSX.Element => {
     savePrimaryCategoryToDB(workingObject)
   }
 
-  
   const editSubcat = async (e: any) => {
     let dataPack = {
       title: primaryRef.current.value,
@@ -167,7 +166,6 @@ const AddPane = (props: any): JSX.Element => {
     savePrimaryCategoryToDB(workingObject)
   }
 
-  
   const editSubSubcat = async (e: any) => {
     let dataPack = {
       title: primaryRef.current.value,
@@ -183,8 +181,6 @@ const AddPane = (props: any): JSX.Element => {
     await savePrimaryCategoryToDB(newWorkingObject)
     gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
   }
-
-
 
   /* Final Category Actions */
 
@@ -214,7 +210,6 @@ const AddPane = (props: any): JSX.Element => {
     savePrimaryCategoryToDB(workingObject)
   }
 
-  
   const editFinalcat = async (e: any) => {
     let dataPack = {
       title: primaryRef.current.value,
@@ -231,19 +226,36 @@ const AddPane = (props: any): JSX.Element => {
     gatherUserPrimaryCategoriesFromDB(userObj.auth, dispatch)
   }
 
-
-
-
+  const lengthListener = () => {
+    if (primaryRef.current.value === null) return
+    if (primaryRef?.current?.value.length > 62) {
+      setLengthAlert(true)
+    }
+  }
 
   return (
     <div className='add-pane-container'>
       <h2 className='title'>{`Add ${
         display.isAddPrimary ? 'Primary ' : 'Sub-'
       }Category`}</h2>
-      <span>Primary Title</span>
+      <span style={{ display: 'inline-block' }}>Primary Title</span>
+      {lengthAlert && (
+        <span
+          style={{
+            display: 'inline-block',
+            position: 'absolute',
+            right: 30,
+            color: 'red',
+            fontWeight: 900,
+          }}>
+          Too long!
+        </span>
+      )}
       <textarea
         ref={primaryRef}
-        defaultValue={`${display.isEdit ? display.editTitle : ''}`}></textarea>
+        defaultValue={`${display.isEdit ? display.editTitle : ''}`}
+        style={{ color: `${lengthAlert ? 'red' : 'white'}` }}
+        onInput={lengthListener}></textarea>
       <span>Sub-Title</span>
       <textarea
         ref={subtitleRef}
@@ -251,15 +263,24 @@ const AddPane = (props: any): JSX.Element => {
           display.isEdit ? display.editSubtitle : ''
         }`}></textarea>
       <button onClick={closePane}>Cancel</button>
-      <button onClick={createPrimaryCat}>Create Primary</button>
-      <button onClick={createSubcat}>Create Sub</button>
-      <button onClick={createSubSubcat}>Create SubSub</button>
-      <button onClick={createFinalEntry}>Create Final</button>
 
-      {display.isEdit && <button onClick={editPrimaryCat}>editP</button>}
-      {display.isEdit && <button onClick={editSubcat}>editsub</button>}
-      {display.isEdit && <button onClick={editSubSubcat}>editsubsub</button>}
-      {display.isEdit && <button onClick={editSubSubcat}>editFinal</button>}
+      {display.category === 'primary' && !display.isEdit && (
+        <button onClick={createPrimaryCat}>Create Primary</button>
+      )}
+      {display.category === 'sub' && !display.isEdit && (
+        <button onClick={createSubcat}>Create Sub</button>
+      )}
+      {display.category === 'subsub' && !display.isEdit && (
+        <button onClick={createSubSubcat}>Create SubSub</button>
+      )}
+      {display.category === 'final' && !display.isEdit && (
+        <button onClick={createFinalEntry}>Create Final</button>
+      )}
+
+      {display.isEdit && display.category === 'primary' && <button onClick={editPrimaryCat}>editP</button>}
+      {display.isEdit && display.category === 'sub' && <button onClick={editSubcat}>editsub</button>}
+      {display.isEdit && display.category === 'subsub' && <button onClick={editSubSubcat}>editsubsub</button>}
+      {display.isEdit && display.category === 'final' && <button onClick={editSubSubcat}>editFinal</button>}
     </div>
   )
 }

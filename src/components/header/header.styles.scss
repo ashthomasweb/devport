@@ -23,15 +23,18 @@
   padding: 16px 32px;
   position: fixed;
   top: 0;
-  z-index: 2000000002;
+  z-index: 3000;
   user-select: none;
   color: black;
-  border-bottom: solid 4px #444;
+  border-bottom: solid 5px rgb(71, 71, 86)!important;
+  font-family: var(--font-header);
+
 
   h1,
   h2 {
     border: none;
     color: white;
+    margin: 0;
 
     &.tooltip {
       position: relative;
@@ -176,16 +179,18 @@
     font-family: proxima-nova, sans-serif;
     font-size: 18px;
     font-weight: 700;
-    line-height: 21.6px;
-    width: 160px;
-    height: 46px;
+    line-height: 1;
+    width: 190px;
+    height: 38px;
     color: white;
     border-radius: 12px;
-    border: none;
+    // border: none;
     background-color: #222;
     cursor: pointer;
+    left: 25px;
     position: relative;
-    right: 60px;
+    padding: 0;
+    font-family: var(--font-monospace)
   }
 
   .share-btn {
@@ -197,7 +202,7 @@
     height: 32px;
     color: white;
     border-radius: 50px;
-    border: none;
+    // border: none;
     background-color: white;
     cursor: pointer;
     margin: 0 12px;
@@ -210,13 +215,13 @@
     box-sizing: content-box;
     display: none;
     position: absolute;
-    width: 400px;
-    height: 255px;
+    width: 444px;
+    height: 205px;
     top: calc(100vh / 2);
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     padding: 30px;
-    background-color: #222;
+    background-color: #000;
     pointer-events: all;
     z-index: 1000000001;
     border-radius: 24px;
@@ -231,11 +236,15 @@
     width: 50px;
     background-color: #00000000;
     line-height: 21.6px;
-    left: -100px;
-
+    left: 15px;
+    opacity: .6;
+    transition: opacity .1s ease-in-out;
   }
   .user-photo:focus {
     outline: none;
+  }
+  .user-photo:hover {
+    opacity: 1;
   }
 }
 

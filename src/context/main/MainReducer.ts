@@ -43,6 +43,8 @@ export const MainReducer = (state: any, action: any) => {
         idChain: action.payload?.idChain,
         editTitle: action.payload?.title,
         editSubtitle: action.payload?.subtitle,
+        category: action.payload?.category,
+        currentPrimaryId: action.payload?.currentPrimaryId
       }
       return {
         ...state,
@@ -207,7 +209,6 @@ export const MainReducer = (state: any, action: any) => {
     }
 
     case 'SEND_ENTRY_TO_EDITOR': {
-      console.log(action.payload)
       let editorPacket = {
         ...action.payload.editorPacket,
       }

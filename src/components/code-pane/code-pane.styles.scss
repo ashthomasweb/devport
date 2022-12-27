@@ -4,11 +4,12 @@
   right: 0;
   position: absolute;
   bottom: 0;
-  background-color: #262626;
+  background-color: #161616;
   border: 4px solid green;
   margin: 5px 0;
   padding: 10px;
   overflow: scroll;
+  z-index: 2000;
 
   button {
     height: 40px;
@@ -18,15 +19,37 @@
     line-height: 1;
     font-size: 12px;
     margin: 0 0 0 2px;
+    top: 0;
+    padding: 0 11px;
+    background-color: black;
   }
+
+  
 
   input {
     height: 24px;
+    margin-right: 5px;
   }
 
-  h4 {
+  h3 {
     margin: 5px 0;
+    font-weight: 600;
+    font-family: var(--font-monospace);
   }
+
+  p {
+    margin: 5px 0 10px;
+    font-style: italic;
+    white-space: pre-line;
+    font-family: var(--font-monospace);
+    line-height: 1.2;
+    font-size: 14px;
+    background-color: #2d2d2d;
+    padding: 4px;
+    border: 1px solid #414141;
+  }
+
+
   
 
   .code-window {
@@ -35,10 +58,10 @@
     width: 100%;
     height: auto;
     resize: vertical;
-    background-color: #303030;
+    background-color: #1e1e1e;
     padding: 4px;
 
-    margin: 5px 0 0 0;
+    margin: 10px 0 0 0;
 
     textarea {
         width: 100%;

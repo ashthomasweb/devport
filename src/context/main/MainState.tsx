@@ -64,7 +64,7 @@ const initialState = {
     isEdit: false,
     editId: null,
     isSubcategoryPaneOpen: false,
-    headerHeight: 72,
+    headerHeight: 62,
     subheaderHeight: 95,
     isCodePaneOpen: false
   },

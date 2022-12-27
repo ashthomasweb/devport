@@ -1,12 +1,25 @@
 .subcategory-pane-container {
-    width: 280px;
+    width: 290px;
     padding: 10px;
     height: 100%;
     left: 10px;
     position: relative;
-    background-color: #333;
+    background-color: #1e1e1e;
+
+    h3 {
+        margin: 0;
+    font-family: var(--font-monospace);
+    font-weight: 600;
+    }
 
      p {
         font-style: italic;
+        margin: 0;
+        font-size: 14px;
+    font-family: var(--font-monospace);
+
     }
+
+
+   
 }

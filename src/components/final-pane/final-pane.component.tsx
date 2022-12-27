@@ -43,22 +43,27 @@ const FinalPane = (props: any): JSX.Element => {
   const addItem = (e: any) => {
     dispatch({
       type: 'TOG_ADD_PANE',
-      payload: { isAddPrimary: false },
+      payload: { isAddPrimary: false, category: 'final' },
     })
   }
 
   return (
     <div className='final-pane-container' onDoubleClick={addItem}>
-      {display.finalPaneParentTitle}<br/>
-      {display.finalPaneParentSubtitle}
+      <h3>{display.finalPaneParentTitle}</h3>
+      <p>{display.finalPaneParentSubtitle}</p>
 
       {workingObject?.entries[
         indexFinder(workingObject.entries, display.currentPaneParentId)
-      ].entries[indexFinder(workingObject.entries[
-        indexFinder(workingObject.entries, display.currentPaneParentId)
-      ].entries, display.finalPaneParentId)].entries.map((entry: any, index: number) => {
+      ].entries[
+        indexFinder(
+          workingObject.entries[
+            indexFinder(workingObject.entries, display.currentPaneParentId)
+          ].entries,
+          display.finalPaneParentId
+        )
+      ].entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <SubCategory key={index} data={entry} />
+          return <SubCategory key={index} data={entry} pane='final'/>
         } else return
       })}
       <button onClick={closePane}>X</button>

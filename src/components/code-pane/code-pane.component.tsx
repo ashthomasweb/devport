@@ -15,6 +15,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
+import { toast } from 'react-toastify'
 
 import {
   /* Assets */
@@ -135,7 +136,7 @@ const CodePane = (props: any): JSX.Element => {
   let inputStyle: any = {
     border: `${allowEdit ? '1px solid lightgreen' : '1px solid lightgrey'}`,
     pointerEvents: `${allowEdit ? 'all' : 'none'}`,
-    margin: '0 2px 3px 0',
+    margin: '0 5px 3px 0',
   }
 
   const closeCodePane = () => {
@@ -144,50 +145,69 @@ const CodePane = (props: any): JSX.Element => {
     })
   }
 
+  const copyCode = async (input: string) => {
+    try {
+      await navigator.clipboard.writeText(input)
+      await toast('Content copied to clipboard')
+    } catch (err) {
+      await toast('Failed to copy!')
+      console.log('Failed to copy: ', err)
+
+    }
+  }
+
   return (
     <div className='code-pane'>
-      {editorPacket.title}<button style={{position: 'absolute', right: 0}}onClick={closeCodePane}>Close</button>
-      <br />
-      {editorPacket.subtitle}
-      <br />
+      <h3>{editorPacket.title}</h3>
+      <button
+        style={{ position: 'absolute', right: 0 }}
+        onClick={closeCodePane}>
+        Close
+      </button>
+      <p>{editorPacket.subtitle}</p>
+      {/* <br /> */}
       <input ref={fileNameRef} placeholder='filename.ext' type='text'></input>
       <input ref={fileExtRef} placeholder='language' type='text'></input>
       <button onClick={saveCodeFile}>Save To Entry</button>
       <button onClick={newCodeFile}>New File</button>
 
-      {editorPacket.codePacket.length >= 1 && editorPacket?.codePacket.map((file: any, index: number) => {
-        return (
-          <div key={index} className='code-window'>
-            <div>
-              <input
-                ref={fileTitleRef}
-                style={inputStyle}
-                type='text'
-                defaultValue={file.title}></input>
-              <input
-                ref={fileLanguageRef}
-                style={inputStyle}
-                type='text'
-                defaultValue={file.language}></input>
-              <button onClick={() => editFileParams(index)}>{`${
-                allowEdit ? 'Cancel' : 'Edit'
-              }`}</button>
+      {editorPacket.codePacket.length >= 1 &&
+        editorPacket?.codePacket.map((file: any, index: number) => {
+          return (
+            <div key={index} className='code-window'>
+              <div>
+                <button onClick={() => copyCode(file.content)}>Copy</button>
+                <input
+                  ref={fileTitleRef}
+                  style={inputStyle}
+                  type='text'
+                  defaultValue={file.title}></input>
+                <input
+                  ref={fileLanguageRef}
+                  style={inputStyle}
+                  type='text'
+                  defaultValue={file.language}></input>
+                <button onClick={() => editFileParams(index)}>{`${
+                  allowEdit ? 'Cancel' : 'Edit'
+                }`}</button>
 
-              <button onClick={() => deleteFile(file.id)}>Delete</button>
-              {allowEdit && (
-                <button onClick={(e) => saveFileParams(e, file.id)}>
-                  Save
-                </button>
-              )}
+                <button onClick={() => deleteFile(file.id)}>Delete</button>
+                {allowEdit && (
+                  <button onClick={(e) => saveFileParams(e, file.id)}>
+                    Save
+                  </button>
+                )}
+              </div>
+              <div style={{position: 'relative'}}>
+              <AceWindow
+                id={index}
+                codeContent={file.content}
+                language={file.language}
+              />
+              </div>
             </div>
-            <AceWindow
-              id={index}
-              codeContent={file.content}
-              language={file.language}
-            />
-          </div>
-        )
-      })}
+          )
+        })}
     </div>
   )
 }
