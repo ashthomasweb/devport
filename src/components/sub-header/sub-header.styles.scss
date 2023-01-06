@@ -4,24 +4,26 @@
     align-items: center;
     gap: 15px;
     padding-left: 10px;
-    padding-right: 10px;
+    padding-right: 73px;
     box-sizing: border-box;
     overflow-x: scroll;
     position: fixed;
     top: 110px;
     z-index: 5000;
-
+    user-select: none;
 
     
     /* width */
     &::-webkit-scrollbar {
       height: 5px;
-      cursor: pointer;
+      cursor: pointer!important;
     }
 
     /* Track */
     &::-webkit-scrollbar-track {
       background:  rgb(71, 71, 86);
+      cursor: pointer!important;
+
     }
 
     // &::-webkit-scrollbar-corner {
@@ -36,6 +38,8 @@
     /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover {
       background: rgb(108, 108, 130);
+      cursor: pointer!important;
+
     }
 
 
@@ -45,5 +49,6 @@
         right: -9px;
         height: 75px;
         text-transform: uppercase;
+        z-index: 10000;
     }
 }

@@ -29,13 +29,21 @@ import {
 
 interface initialStateType {
   userObj: any
- 
+
   globalDisplay: {
-  
     isAdminPage: boolean
     isWelcomePage: boolean
     isBoardPage: boolean
   }
+  globalDragData: {
+    currentDropId: string | null
+    currentDropPaneId: string | null
+    currentDraggingId: number | null
+    currentDropPaneChain: any[] | null
+    currentDropChain: any[] | null
+  }
+  subSubPaneEntry: any
+  subPaneEntry: any
 }
 
 /** INITIAL STATE DECLARATION **************************************/
@@ -49,6 +57,16 @@ const initialState = {
     isBoardPage: false,
   
   },
+  globalDragData: {
+    currentDropId: null,
+    currentDropPaneId: null,
+    currentDraggingId: null,
+    currentDropPaneChain: null,
+    currentDropChain: null
+  },
+  subSubPaneEntry: {},
+  subPaneEntry: {}
+
 }
 
 export const GlobalContext = createContext<{

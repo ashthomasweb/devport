@@ -27,8 +27,6 @@ export const GlobalReducer = (state: any, action: any) => {
 
 
   switch (action.type) {
-
-
     case 'SET_CURRENT_USER_TO_STATE': {
       // console.log(`Trace: SET_CURRENT_USER_TO_STATE()`)
       let data = action.payload.userObj
@@ -48,7 +46,7 @@ export const GlobalReducer = (state: any, action: any) => {
       }
     }
 
-  //   /* DISPLAY PANE */
+    //   /* DISPLAY PANE */
 
     case 'ADMIN_PAGE_ON': {
       // console.log(`Trace: ADMIN_PAGE_ON()`)
@@ -89,6 +87,69 @@ export const GlobalReducer = (state: any, action: any) => {
       return {
         ...state,
         globalDisplay: globalDisplay,
+      }
+    }
+
+    case 'SET_DRAG_ID': {
+      console.log(`Trace: SET_DRAG_ID()`)
+      let globalDragData = {
+        ...state.globalDragData,
+        currentDropPaneId: null,
+        currentDropId: action.payload.currentDropId,
+        currentDropChain: [action.payload.chain],
+        currentDropPaneChain: null
+      }
+      // console.log(action.payload.currentDropId)
+      return {
+        ...state,
+        globalDragData: globalDragData,
+      }
+    }
+
+    case 'SET_DRAGGING_ID': {
+      console.log(`Trace: SET_DRAGGING_ID()`)
+      let globalDragData = {
+        ...state.globalDragData,
+        currentDraggingId: action.payload.currentDraggingId,
+      }
+      // console.log(action.payload.currentDropId)
+      return {
+        ...state,
+        globalDragData: globalDragData,
+      }
+    }
+
+    case 'SET_DRAG_PANE': {
+      console.log(`Trace: SET_DRAG_PANE()`)
+      let globalDragData = {
+        ...state.globalDragData,
+        currentDropPaneId: action.payload.currentDropPaneId,
+        currentDropId: null,
+        currentDropPaneChain: [action.payload.chain],
+        currentDropChain: null
+      }
+      // console.log(action.payload.currentDropId)
+      return {
+        ...state,
+        globalDragData: globalDragData,
+      }
+    }
+
+    case 'SET_SUBSUB_ENTRY': {
+      console.log(`Trace: SET_SUBSUB_ENTRY()`)
+      let subSubEntry = action.payload.subSubEntry
+      return {
+        ...state,
+        subSubPaneEntry: subSubEntry,
+      }
+    }
+
+    case 'SET_SUB_ENTRY': {
+      console.log(`Trace: SET_SUB_ENTRY()`)
+      let subEntry = action.payload.subEntry
+      return {
+        ...state,
+        subPaneEntry: subEntry,
       }
     }
 

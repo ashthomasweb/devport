@@ -13,8 +13,9 @@
 
 ******************************************************************************/
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
+import { GlobalContext } from '../../context/global/GlobalState'
 
 import { 
   /* Assets */
@@ -22,7 +23,7 @@ import {
   /* Helper Functions */
   indexFinder,
   /* Components */
-  SubCategory,
+  Entry,
   /* Icons */
 } from '../../export-hub'
 
@@ -33,7 +34,10 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
     state: { display, workingObject },
     dispatch,
   } = useContext(MainContext)
-
+    const {
+      state: { globalDragData, subSubPaneEntry },
+      globalDispatch,
+    } = useContext(GlobalContext)
 
   // const myFunction = (e: any) => {
   
@@ -71,15 +75,36 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
     })
   }
 
+  const dragIdHandler = () => {
+    globalDispatch({
+      type: 'SET_DRAG_PANE',
+      payload: {
+        currentDropPaneId: display.currentSubEntryData.id,
+        chain: display.currentSubEntryData.childOfChain,
+      },
+    })
+  }
+
   return (
-    <div className='subsubcategory-pane-container' onDoubleClick={addItem}>
-      <h3>{display.currentPaneParentTitle}</h3>
-      <p>{display.currentPaneParentSubtitle}</p>
+    <div
+      className='subsubcategory-pane-container'
+      onDoubleClick={addItem}
+      onDragOver={dragIdHandler}
+      style={{
+        outline: `${
+          display.currentSubEntryData.id === globalDragData.currentDropPaneId
+            ? '3px solid yellow'
+            : 'none'
+        }`,
+      }}>
+      <h3>{display.currentSubEntryData.id}</h3>
+      <h3>{display.currentSubEntryData.title}</h3>
+      <p>{display.currentSubEntryData.subtitle}</p>
       {workingObject?.entries[
-        indexFinder(workingObject.entries, display.currentPaneParentId)
+        indexFinder(workingObject.entries, display.currentSubEntryData.id)
       ].entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <SubCategory key={index} data={entry} pane='subsub' />
+          return <Entry key={index} data={entry} pane='subsub' />
         } else return
       })}
       <button onClick={closePane}>X</button>

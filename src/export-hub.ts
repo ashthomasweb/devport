@@ -44,7 +44,7 @@ import PrimaryCategory from './components/primary-category/primary-category.comp
 import AddPane from './components/add-pane/add-pane.component'
 import SubcategoryPane from './components/subcategory-pane/subcategory-pane.component'
 import PaneContainer from './components/pane-container/pane-container.component'
-import SubCategory from './components/sub-category/sub-category.component'
+import Entry from './components/entry/entry.component'
 import SubSubcategoryPane from './components/subsubcategory-pane/subsubcategory-pane.component'
 import FinalPane from './components/final-pane/final-pane.component'
 import CodePane from './components/code-pane/code-pane.component'
@@ -56,7 +56,7 @@ import CodePane from './components/code-pane/code-pane.component'
 /* Initial Assets */
 
 /* Helper Methods */
-import { indexFinder, treeSearchAndUpdateInPlace } from './utilities/look-up-methods'
+import { indexFinder, treeSearchAndUpdateInPlace, moveEntry } from './utilities/look-up-methods'
 /* Icons */
 
 /* EXPORTS *********************************************************/
@@ -87,7 +87,7 @@ export {
   AddPane,
   SubcategoryPane,
   PaneContainer,
-  SubCategory,
+  Entry,
   SubSubcategoryPane,
   FinalPane,
   CodePane,
@@ -98,7 +98,7 @@ export {
 /* Initial Assets */
 
 /* Helper Methods */
-export { indexFinder, treeSearchAndUpdateInPlace }
+export { indexFinder, treeSearchAndUpdateInPlace, moveEntry }
 /* Icons */
 
 /* END OF DOCUMENT ***********************************************************/

@@ -15,14 +15,15 @@
 
 import React, { useContext, useEffect } from 'react'
 import { MainContext } from '../../context/main/MainState'
+import { GlobalContext } from '../../context/global/GlobalState'
 
-import { 
+import {
   /* Assets */
   /* Database */
   /* Helper Functions */
   indexFinder,
   /* Components */
-  SubCategory,
+  Entry,
   /* Icons */
 } from '../../export-hub'
 
@@ -33,7 +34,8 @@ const FinalPane = (props: any): JSX.Element => {
     state: { display, workingObject },
     dispatch,
   } = useContext(MainContext)
-  
+  const { state: {globalDragData }, globalDispatch } = useContext(GlobalContext)
+
   const closePane = (e: any) => {
     dispatch({
       type: 'TOG_FINAL_PANE',
@@ -47,23 +49,44 @@ const FinalPane = (props: any): JSX.Element => {
     })
   }
 
+  const dragIdHandler = () => {
+    globalDispatch({
+      type: 'SET_DRAG_PANE',
+      payload: { currentDropPaneId: display.finalPaneEntryData.id,
+      chain: display.finalPaneEntryData.chain },
+    })
+  }
+
+
   return (
-    <div className='final-pane-container' onDoubleClick={addItem}>
-      <h3>{display.finalPaneParentTitle}</h3>
-      <p>{display.finalPaneParentSubtitle}</p>
+    <div
+      className='final-pane-container'
+      onDoubleClick={addItem}
+      onDragOver={dragIdHandler}
+      style={{
+        outline: `${
+          display.finalPaneEntryData.id === globalDragData.currentDropPaneId
+            ? '3px solid yellow'
+            : 'none'
+        }`,
+      }}>
+      <h3>{display.finalPaneEntryData.id}</h3>
+
+      <h3>{display.finalPaneEntryData.title}</h3>
+      <p>{display.finalPaneEntryData.subtitle}</p>
 
       {workingObject?.entries[
-        indexFinder(workingObject.entries, display.currentPaneParentId)
+        indexFinder(workingObject.entries, display.currentSubEntryData.id)
       ].entries[
         indexFinder(
           workingObject.entries[
-            indexFinder(workingObject.entries, display.currentPaneParentId)
+            indexFinder(workingObject.entries, display.currentSubEntryData.id)
           ].entries,
-          display.finalPaneParentId
+          display.finalPaneEntryData.id
         )
       ].entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <SubCategory key={index} data={entry} pane='final'/>
+          return <Entry key={index} data={entry} pane='final' />
         } else return
       })}
       <button onClick={closePane}>X</button>

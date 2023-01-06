@@ -4,12 +4,14 @@
     outline: 2px solid grey;
     background-color: #2d2d2d;
     width: 200px;
-    height: 70px;
+    height: 77px;
     padding: 3px 10px 5px 10px;
     min-width: 120px;
     font-size: 12px;
     font-family: var(--font-monospace);
     cursor: pointer;
+    overflow: hidden;
+    user-select: none;
 
     h4 {
         margin: 0!important;

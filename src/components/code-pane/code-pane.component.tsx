@@ -156,6 +156,7 @@ const CodePane = (props: any): JSX.Element => {
     }
   }
 
+
   return (
     <div className='code-pane'>
       <h3>{editorPacket.title}</h3>
@@ -198,12 +199,12 @@ const CodePane = (props: any): JSX.Element => {
                   </button>
                 )}
               </div>
-              <div style={{position: 'relative'}}>
-              <AceWindow
-                id={index}
-                codeContent={file.content}
-                language={file.language}
-              />
+              <div style={{ position: 'relative' }}>
+                <AceWindow
+                  id={index}
+                  codeContent={file.content}
+                  language={file.language}
+                />
               </div>
             </div>
           )

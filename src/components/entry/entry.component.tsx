@@ -15,6 +15,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
+import cloneDeep from 'lodash.clonedeep'
 
 import {
   /* Assets */
@@ -25,26 +26,26 @@ import {
   /* Helper Functions */
   indexFinder,
   treeSearchAndUpdateInPlace,
+  moveEntry
   /* Components */
   /* Icons */
 } from '../../export-hub'
 
-import './sub-category.styles.scss'
+import './entry.styles.scss'
 
-const SubCategory = (props: any): JSX.Element => {
+const Entry = (props: any): JSX.Element => {
   const {
     state: { workingObject, display, editorPacket },
     dispatch,
   } = useContext(MainContext)
   const {
-    state: { userObj },
+    state: { userObj, globalDragData },
     globalDispatch,
   } = useContext(GlobalContext)
 
   let [isCodeVisible, setIsCodeVisible]: any = useState(false)
   let [activeBorder, setActiveBorder]: any = useState(false)
   let [borderSwitch, setBorderSwitch]: any = useState(false)
-
 
   const deleteSubcategory = async (e: any) => {
     e.preventDefault()
@@ -119,16 +120,18 @@ const SubCategory = (props: any): JSX.Element => {
   }
 
   const openPane = () => {
+    let entryPacket = cloneDeep(props.data) 
+    delete entryPacket.entries 
+    delete entryPacket.codePacket
     if (props.pane === 'sub') {
       dispatch({
-        type: 'SET_CURRENT_PARENT_ID',
+        type: 'SET_CURRENT_SUB_ENTRY',
         payload: {
-          id: props.data.id,
-          title: props.data.title,
-          subtitle: props.data.subtitle,
+          currentSubEntryData: entryPacket
         },
       })
-      if (props.data.id === display.currentPaneParentId) {
+      if (props.data.id === display.currentSubEntryData?.id) {
+        // debugger
         dispatch({
           type: 'TOG_SUBSUBCAT_PANE',
         })
@@ -141,12 +144,10 @@ const SubCategory = (props: any): JSX.Element => {
       dispatch({
         type: 'SET_FINAL_ID',
         payload: {
-          id: props.data.id,
-          title: props.data.title,
-          subtitle: props.data.subtitle,
+          finalPaneEntryData: entryPacket,
         },
       })
-      if (props.data.id === display.finalPaneParentId) {
+      if (props.data.id === display.finalPaneEntryData?.id) {
         dispatch({
           type: 'TOG_FINAL_PANE',
         })
@@ -165,21 +166,19 @@ const SubCategory = (props: any): JSX.Element => {
 
   useEffect(() => {
     if (props.pane === 'sub') {
+      // debugger
       if (
-        display.currentPaneParentId === props.data.id &&
+        display.currentSubEntryData?.id === props.data.id &&
         display.isSubSubcategoryPaneOpen
       ) {
-        console.log('1 t')
         setActiveBorder(true)
       } else {
-        console.log('1 f')
         setActiveBorder(false)
       }
     }
-
     if (props.pane === 'subsub') {
       if (
-        display.finalPaneParentId === props.data.id &&
+        display.finalPaneEntryData?.id === props.data.id &&
         display.isFinalPaneOpen
       ) {
         setActiveBorder(true)
@@ -187,12 +186,54 @@ const SubCategory = (props: any): JSX.Element => {
         setActiveBorder(false)
       }
     }
-  }, [display.currentPaneParentId, display.finalPaneParentId, borderSwitch])
+  }, [display.currentSubEntryData, display.finalPaneEntryData?.id, borderSwitch])
 
+  const fireDropEvent = (e: any) => {
+    // console.log(globalDragData.currentDraggingId)
+      // console.log(globalDragData.currentDropPaneId)
+      // console.log(globalDragData.currentDropId)
+      moveEntry(globalDragData, workingObject, props.data)
+
+    // if (
+    //   globalDragData.currentDropId === globalDragData.currentDraggingId
+    // ) {
+    //   console.log(globalDragData.currentDropPaneId)
+    // } else {
+    //   console.log(globalDragData.currentDropId)
+    //   // irrelevant - a 'pane' is just a displayed entry
+    // }
+  }
+
+
+
+  const dragIdHandler = (e: any) => {
+    // if (globalDragData.currentDropId === e.target.id) return
+    e.stopPropagation()
+    globalDispatch({
+      type: 'SET_DRAG_ID',
+      payload: { currentDropId: props.data.id, chain: props.data.childOfChain },
+    })
+  }
+
+  // const dragEntryReset = () => {
+  //   console.log('test')
+  //   globalDispatch({
+  //     type: 'SET_DRAG_ID',
+  //     payload: { currentDropId: null },
+  //   })
+  // }
+
+  const setDraggingId = () => {
+    globalDispatch({
+      type: 'SET_DRAGGING_ID',
+      payload: { currentDraggingId: props.data.id },
+    })
+  }
 
   return (
     <div
-      className='sub-category-container'
+      className='entry-container'
+      id={props.data.id}
       style={{
         outline: `${
           display.isCodePaneOpen && editorPacket?.id === props.data.id
@@ -204,12 +245,20 @@ const SubCategory = (props: any): JSX.Element => {
         border: `${props.data.codePacket.length > 0 && 'none'}`,
       }}
       onContextMenu={updateSubcategory}
-      onClick={clickHandler}>
+      onClick={clickHandler}
+      draggable
+      onDragOver={dragIdHandler}
+      // onDragExit={dragEntryReset}
+      // onDragExit
+      onDragStart={setDraggingId}
+      onDragEnd={fireDropEvent}>
       <div
         style={{
           borderTop: `${
-            props.data.codePacket.length === 0 &&
-            props.data.entries.length === 0
+            props.data.id === globalDragData.currentDropId
+              ? '4px solid yellow'
+              : props.data.codePacket.length === 0 &&
+                props.data.entries.length === 0
               ? 'none'
               : props.data.codePacket.length > 0
               ? display.isCodePaneOpen && editorPacket?.id === props.data.id
@@ -220,8 +269,10 @@ const SubCategory = (props: any): JSX.Element => {
               : '4px solid grey'
           }`,
           borderRight: `${
-            props.data.codePacket.length === 0 &&
-            props.data.entries.length === 0
+            props.data.id === globalDragData.currentDropId
+              ? '4px solid yellow'
+              : props.data.codePacket.length === 0 &&
+                props.data.entries.length === 0
               ? 'none'
               : props.data.codePacket.length > 0
               ? display.isCodePaneOpen && editorPacket?.id === props.data.id
@@ -236,7 +287,7 @@ const SubCategory = (props: any): JSX.Element => {
         }}
         className='top-right-corner'
       />
-
+      {activeBorder && <div className='is-open-arrow' />}
       <div
         className='inner-wrapper'
         style={{
@@ -266,7 +317,7 @@ const SubCategory = (props: any): JSX.Element => {
             }}
             onClick={openCodePane}>{`<>`}</button>
         )}
-
+        <h6>{props.data.id}</h6>
         <h4>{props.data.title}</h4>
         <p>{props.data.subtitle.substring(0, 120)}</p>
       </div>
@@ -274,12 +325,6 @@ const SubCategory = (props: any): JSX.Element => {
   )
 }
 
-export default SubCategory
+export default Entry
 
 // END of document
-
-{
-  /* <div style={{}} className='top-left-corner' />
-      <div style={{}} className='bottom-right-corner' />
-      <div style={{}} className='bottom-left-corner' /> */
-}

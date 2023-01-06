@@ -16,6 +16,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { MainContext } from '../../context/main/MainState'
 import { GlobalContext } from '../../context/global/GlobalState'
+import cloneDeep from 'lodash.clonedeep'
 
 import {
   /* Assets */
@@ -91,6 +92,15 @@ const PrimaryCategory = (props: any): JSX.Element => {
     }
   }
 
+  
+
+
+
+
+
+
+
+
   const openSubcategoryPane = async (e: any) => {
     setBorderSwitch(!borderSwitch)
 
@@ -102,11 +112,14 @@ const PrimaryCategory = (props: any): JSX.Element => {
       type: 'SET_WORKING_OBJECT',
       payload: { workingObject: obj },
     })
+    let entryPacket = cloneDeep(obj)
+    delete entryPacket.entries
+    delete entryPacket.codePacket
     dispatch({
       type: 'OPEN_PRIMARY_PANE',
-      payload: { category: props.data.title, subtitle: props.data.subtitle },
+      payload: { entryData: entryPacket },
     })
-    if (display.isSubcategoryPaneOpen && display.currentPrimaryId === props.data.id) {
+    if (display.isSubcategoryPaneOpen && display.currentPrimaryEntryData.id === props.data.id) {
       dispatch({
         type: 'CLOSE_SUBCAT_PANE'
       })

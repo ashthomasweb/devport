@@ -81,9 +81,8 @@ export const MainReducer = (state: any, action: any) => {
     case 'OPEN_PRIMARY_PANE': {
       let display = {
         ...state.display,
+        currentPrimaryEntryData: action.payload.entryData,
         isSubcategoryPaneOpen: true,
-        currentPrimary: action.payload?.category,
-        currentPrimarySubtitle: action.payload?.subtitle,
         isSubSubcategoryPaneOpen: false,
         isFinalPaneOpen: false,
       }
@@ -182,12 +181,11 @@ export const MainReducer = (state: any, action: any) => {
       }
     }
 
-    case 'SET_CURRENT_PARENT_ID': {
+    case 'SET_CURRENT_SUB_ENTRY': {
+      console.log(`Trace: SET_CURRENT_SUB_ENTRY()`)
       let display = {
         ...state.display,
-        currentPaneParentId: action.payload.id,
-        currentPaneParentTitle: action.payload.title,
-        currentPaneParentSubtitle: action.payload.subtitle,
+        currentSubEntryData: action.payload.currentSubEntryData
       }
       return {
         ...state,
@@ -198,9 +196,7 @@ export const MainReducer = (state: any, action: any) => {
     case 'SET_FINAL_ID': {
       let display = {
         ...state.display,
-        finalPaneParentId: action.payload.id,
-        finalPaneParentTitle: action.payload.title,
-        finalPaneParentSubtitle: action.payload.subtitle,
+        finalPaneEntryData: action.payload.finalPaneEntryData,
       }
       return {
         ...state,

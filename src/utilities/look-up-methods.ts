@@ -13,10 +13,11 @@ export const indexFinder = (
 export const treeSearchAndUpdateInPlace = (
   treeObj: any,
   id: string | number | null,
-  chain: number[],
+  chain: any[],
   newEntryValues: any = null,
   toDelete: boolean = false,
-  codePacket: any = null
+  codePacket: any = null,
+  newEntry: any = null
 ): void => {
   console.log(`Trace: treeSearchAndUpdateInPlace()`)
   let depth = chain.length + 1
@@ -33,11 +34,27 @@ export const treeSearchAndUpdateInPlace = (
   function updateCode(self: any) {
     self.codePacket = codePacket
   }
+
+  function addEntryToPacket(self: any) {
+    console.log(self)
+    self.entries.push(newEntry)
+  }
+
+  function removeEntryFromPacket(self: any) {
+    self.entries = self.entries.filter(
+      (entry: any) => entry.title !== newEntry.title
+    )
+  }
+
   let operation
-  if (toDelete) {
+  if (toDelete && newEntry === null) {
     operation = markDeleted
   } else if (codePacket !== null) {
     operation = updateCode
+  } else if (newEntry !== null) {
+    operation = addEntryToPacket
+  } else if (newEntry !== null && toDelete === true) {
+    operation = removeEntryFromPacket
   } else {
     operation = updateFields
   }
@@ -75,4 +92,30 @@ export const treeSearchAndUpdateInPlace = (
     operation(self)
   }
   return treeObj
+}
+
+export const moveEntry = (dragData: any, workingObject: any, entry: any) => {
+  let destinationId = dragData.currentDropId || dragData.currentDropPaneId
+  let draggedEntryId = dragData.currentDraggingId
+  console.log(destinationId)
+  console.log(entry)
+  console.log(dragData)
+  treeSearchAndUpdateInPlace(
+    workingObject,
+    dragData.currentDropId | dragData.currentDropPaneId,
+    dragData.currentDropChain | dragData.currentDropPaneChain, // from drop id
+    null,
+    false,
+    null,
+    entry
+  )
+  // treeSearchAndUpdateInPlace(
+  //   workingObject,
+  //   dragData.currentDraggingId,
+  //   entry.childOfChain, // from drop id
+  //   null,
+  //   true,
+  //   null,
+  //   entry
+  // )
 }

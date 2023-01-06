@@ -150,7 +150,7 @@ const AddPane = (props: any): JSX.Element => {
   const createSubSubcat = (e: any) => {
     let workingEntry =
       workingObject.entries[
-        indexFinder(workingObject.entries, display.currentPaneParentId)
+        indexFinder(workingObject.entries, display.currentSubEntryData.id)
       ]
 
     let dataPacket = cloneDeep(newEntry)
@@ -187,13 +187,13 @@ const AddPane = (props: any): JSX.Element => {
   const createFinalEntry = (e: any) => {
     let workingEntry =
       workingObject.entries[
-        indexFinder(workingObject.entries, display.currentPaneParentId)
+        indexFinder(workingObject.entries, display.currentSubEntryData.id)
       ].entries[
         indexFinder(
           workingObject.entries[
-            indexFinder(workingObject.entries, display.currentPaneParentId)
+            indexFinder(workingObject.entries, display.currentSubEntryData.id)
           ].entries,
-          display.finalPaneParentId
+          display.finalPaneEntryData.id
         )
       ]
 

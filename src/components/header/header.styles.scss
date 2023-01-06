@@ -93,6 +93,34 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+
+    h1 {
+
+      span {
+        &.animate-X {
+          animation: spinAroundX;
+          animation-duration: 0.5s;
+        }
+         &.animate-Y {
+          animation: spinAroundY;
+          animation-duration: 0.5s;
+        }
+         &.animate-Z {
+          animation: spinAroundZ;
+          animation-duration: 0.5s;
+        }
+      }
+    }
+  }
+
+  @keyframes spinAroundX {
+    100% {transform: rotateX(360deg)}
+  }
+  @keyframes spinAroundY {
+    100% {transform: rotateY(360deg)}
+  }
+  @keyframes spinAroundZ {
+    100% {transform: rotateZ(360deg)}
   }
 
   .title-controls {
