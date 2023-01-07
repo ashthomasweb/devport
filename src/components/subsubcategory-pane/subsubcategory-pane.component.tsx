@@ -80,7 +80,7 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
       type: 'SET_DRAG_PANE',
       payload: {
         currentDropPaneId: display.currentSubEntryData.id,
-        chain: display.currentSubEntryData.childOfChain,
+        chain: [...display.currentSubEntryData.childOfChain],
       },
     })
   }
@@ -101,7 +101,7 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
       <h3>{display.currentSubEntryData.title}</h3>
       <p>{display.currentSubEntryData.subtitle}</p>
       {workingObject?.entries[
-        indexFinder(workingObject.entries, display.currentSubEntryData.id)
+        indexFinder(workingObject.entries, display.currentSubEntryData?.id)
       ].entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
           return <Entry key={index} data={entry} parentChain={display.currentSubEntryData.chain} pane='subsub' />

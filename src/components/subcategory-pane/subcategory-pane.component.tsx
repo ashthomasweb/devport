@@ -77,7 +77,7 @@ const SubcategoryPane = (props: any): JSX.Element => {
       type: 'SET_DRAG_PANE',
       payload: {
         currentDropPaneId: display.currentPrimaryEntryData.id,
-        chain: display.currentPrimaryEntryData.chain,
+        chain: [...display.currentPrimaryEntryData.childOfChain],
       },
     })
   }

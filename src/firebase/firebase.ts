@@ -161,7 +161,7 @@ export const gatherSinglePrimaryCategoryFromDB = async (userAuth, id) => {
 export const savePrimaryCategoryToDB = async (dataPacket) => {
   if (dataPacket.title === '') return
 
-  const { id, type, title, subtitle, deletedAt, entries, codePacket } = dataPacket
+  const { id, type, title, subtitle, deletedAt, entries, codePacket, childOfChain } = dataPacket
 
   const boardFireStoreRef = doc(
     db,
@@ -181,7 +181,8 @@ export const savePrimaryCategoryToDB = async (dataPacket) => {
       subtitle,
       deletedAt,
       entries,
-      codePacket
+      codePacket,
+      childOfChain
     }
     try {
       await setDoc(boardFireStoreRef, board)
@@ -198,7 +199,8 @@ export const savePrimaryCategoryToDB = async (dataPacket) => {
       subtitle,
       deletedAt,
       entries,
-      codePacket
+      codePacket,
+      childOfChain
     }
     try {
       await setDoc(boardFireStoreRef, board, { merge: true })

@@ -58,6 +58,7 @@ import {
   moveEntry,
   findTreeEntry,
   findTreeEntryParent,
+  removeEntryFromArray
 } from './utilities/look-up-methods'
 /* Icons */
 
@@ -106,6 +107,7 @@ export {
   moveEntry,
   findTreeEntry,
   findTreeEntryParent,
+  removeEntryFromArray
 }
 /* Icons */
 

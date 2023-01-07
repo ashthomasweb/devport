@@ -53,7 +53,7 @@ const FinalPane = (props: any): JSX.Element => {
     globalDispatch({
       type: 'SET_DRAG_PANE',
       payload: { currentDropPaneId: display.finalPaneEntryData.id,
-      chain: display.finalPaneEntryData.chain },
+      chain: [...display.finalPaneEntryData.childOfChain] },
     })
   }
 

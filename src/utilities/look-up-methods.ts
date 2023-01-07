@@ -21,11 +21,12 @@ export const treeSearchAndUpdateInPlace = (
 ): void => {
   console.log(`Trace: treeSearchAndUpdateInPlace()`)
   console.log(chain)
+
   let depth
   if (chain === undefined) {
     depth = 1
   } else {
-    depth = chain?.length + 1
+    depth = chain?.length
   }
 
   function updateFields(self: any) {
@@ -43,15 +44,10 @@ export const treeSearchAndUpdateInPlace = (
 
   function addEntryToPacket(self: any) {
     console.log(self)
+    // debugger
     self.entries.push(newEntry)
   }
 
-  function removeEntryFromPacket(self: any) {
-    self.entries = self.entries.filter(
-      (entry: any) => entry.title !== newEntry.title
-    )
-    debugger
-  }
 
   let operation
   if (toDelete && newEntry === null) {
@@ -60,8 +56,6 @@ export const treeSearchAndUpdateInPlace = (
     operation = updateCode
   } else if (newEntry !== null) {
     operation = addEntryToPacket
-  } else if (newEntry !== null && toDelete === true) {
-    operation = removeEntryFromPacket
   } else {
     operation = updateFields
   }
@@ -76,6 +70,7 @@ export const treeSearchAndUpdateInPlace = (
     // subcategory - [top-level working obj ID, ]
     console.log('sub')
     let self = treeObj.entries[indexFinder(treeObj.entries, id)]
+    debugger
     // toDelete ? markDeleted(self) : updateFields(self, newEntryValues)
     operation(self)
   } else if (depth === 3) {
@@ -105,13 +100,9 @@ export const moveEntry = (
   dragData: any,
   workingObject: any,
   entry: any,
-  parentChain: any[]
 ) => {
   let destinationId = dragData.currentDropId || dragData.currentDropPaneId
   let draggedEntryId = dragData.currentDraggingId
-  console.log(destinationId)
-  console.log(entry)
-  console.log(dragData)
   let chain =
     dragData.currentDropChain === null
       ? dragData.currentDropPaneChain
@@ -120,24 +111,10 @@ export const moveEntry = (
     dragData.currentDropPaneId === null
       ? dragData.currentDropId
       : dragData.currentDropPaneId
-  treeSearchAndUpdateInPlace(
-    workingObject,
-    id,
-    chain, // from drop id
-    null,
-    false,
-    null,
-    entry
-  )
-  // treeSearchAndUpdateInPlace(
-  //   workingObject,
-  //   entry.childOfChain[entry.childOfChain.length-1],
-  //   parentChain,
-  //   null,
-  //   true,
-  //   null,
-  //   entry
-  // )
+      debugger
+  let pushEntry = findTreeEntry(workingObject, id, chain)
+  debugger
+  pushEntry.entries.push(entry)
 }
 
 export const findTreeEntry = (
@@ -147,7 +124,10 @@ export const findTreeEntry = (
 ) => {
   let entry
   let depth = entryChain.length
-  if (depth === 1) {
+debugger
+  if (entryChain[0] === undefined) {
+    entry = treeObj
+  } else if (depth === 1) {
     entry = treeObj.entries[indexFinder(treeObj.entries, entryId)]
   }
   if (depth === 2) {
@@ -155,6 +135,7 @@ export const findTreeEntry = (
     entry = parent.entries[indexFinder(parent.entries, entryId)]
   }
   if (depth === 3) {
+    
     let gParent = treeObj.entries[indexFinder(treeObj.entries, entryChain[1])]
     let parent = gParent.entries[indexFinder(gParent.entries, entryChain[2])]
     entry = parent.entries[indexFinder(parent.entries, entryId)]
@@ -181,4 +162,8 @@ export const findTreeEntryParent = (
     parentEntry = parent
   }
   return parentEntry
+}
+
+export const removeEntryFromArray = (entry: any, parentEntry: any) => {
+  return parentEntry.entries.filter((item: any) => item.id !== entry.id)
 }

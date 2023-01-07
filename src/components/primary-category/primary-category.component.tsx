@@ -115,6 +115,7 @@ const PrimaryCategory = (props: any): JSX.Element => {
     let entryPacket = cloneDeep(obj)
     delete entryPacket.entries
     delete entryPacket.codePacket
+    // debugger
     dispatch({
       type: 'OPEN_PRIMARY_PANE',
       payload: { entryData: entryPacket },

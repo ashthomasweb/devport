@@ -79,8 +79,9 @@ const AddPane = (props: any): JSX.Element => {
 
   /* Primary Category Actions */
   const createPrimaryCat = (e: any) => {
+    let newId = Math.random() * 10e18
     let dataPacket: entryType = {
-      id: Math.random() * 10e18,
+      id: newId,
       childOfChain: [],
       type: 'category',
       title: primaryRef.current.value,

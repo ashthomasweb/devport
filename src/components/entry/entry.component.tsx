@@ -28,7 +28,8 @@ import {
   treeSearchAndUpdateInPlace,
   moveEntry,
   findTreeEntry,
-  findTreeEntryParent
+  findTreeEntryParent,
+  removeEntryFromArray,
   /* Components */
   /* Icons */
 } from '../../export-hub'
@@ -76,12 +77,7 @@ const Entry = (props: any): JSX.Element => {
 
   const updateEntry = async (e: any) => {
     e.preventDefault()
-    let entry = findTreeEntry(workingObject, props.data.id, props.data.childOfChain)
-    console.log(entry)
-    let parent = findTreeEntryParent(workingObject, props.data.childOfChain)
-    console.log(parent)
-    parent.subtitle = 'another test!'
-    entry.subtitle = 'just a test'
+
     dispatch({
       type: 'TOG_ADD_PANE',
       payload: {
@@ -115,14 +111,14 @@ const Entry = (props: any): JSX.Element => {
   }
 
   const openPane = () => {
-    let entryPacket = cloneDeep(props.data) 
-    delete entryPacket.entries 
+    let entryPacket = cloneDeep(props.data)
+    delete entryPacket.entries
     delete entryPacket.codePacket
     if (props.pane === 'sub') {
       dispatch({
         type: 'SET_CURRENT_SUB_ENTRY',
         payload: {
-          currentSubEntryData: entryPacket
+          currentSubEntryData: entryPacket,
         },
       })
       if (props.data.id === display.currentSubEntryData?.id) {
@@ -179,14 +175,38 @@ const Entry = (props: any): JSX.Element => {
         setActiveBorder(false)
       }
     }
-  }, [display.currentSubEntryData, display.finalPaneEntryData?.id, borderSwitch])
+  }, [
+    display.currentSubEntryData,
+    display.finalPaneEntryData?.id,
+    borderSwitch,
+  ])
 
-  const fireDropEvent = async (e: any) => {
+  const fireDropEvent = (e: any) => {
     // console.log(globalDragData.currentDraggingId)
-      // console.log(globalDragData.currentDropPaneId)
-      // console.log(globalDragData.currentDropId)
-    await moveEntry(globalDragData, workingObject, props.data, props.parentChain)
-    deleteSubcategory(e)
+    // console.log(globalDragData.currentDropPaneId)
+    // console.log(globalDragData.currentDropId)
+    moveEntry(globalDragData, workingObject, props.data)
+    let chain: any =
+      globalDragData.currentDropChain === null
+        ? globalDragData.currentDropPaneChain
+        : globalDragData.currentDropChain
+    let id: any =
+      globalDragData.currentDropPaneId === null
+        ? globalDragData.currentDropId
+        : globalDragData.currentDropPaneId
+    let newChain = [...chain, id]
+    let entry = findTreeEntry(
+      workingObject,
+      props.data.id,
+      props.data.childOfChain
+    )
+    let parent = findTreeEntryParent(workingObject, props.data.childOfChain)
+    parent.entries = removeEntryFromArray(entry, parent)
+    entry.childOfChain = newChain
+    dispatch({
+      type: 'SET_WORKING_OBJECT',
+      payload: { workingObject: workingObject },
+    })
     // if (
     //   globalDragData.currentDropId === globalDragData.currentDraggingId
     // ) {
@@ -197,15 +217,16 @@ const Entry = (props: any): JSX.Element => {
     // }
   }
 
-
-
-
   const dragIdHandler = (e: any) => {
     // if (globalDragData.currentDropId === e.target.id) return
     e.stopPropagation()
     globalDispatch({
       type: 'SET_DRAG_ID',
-      payload: { currentDropId: props.data.id, chain: props.data.childOfChain, parentChain: props.parentChain },
+      payload: {
+        currentDropId: props.data.id,
+        chain: props.data.childOfChain,
+        parentChain: props.parentChain,
+      },
     })
   }
 
