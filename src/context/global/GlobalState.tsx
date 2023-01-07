@@ -41,6 +41,7 @@ interface initialStateType {
     currentDraggingId: number | null
     currentDropPaneChain: any[] | null
     currentDropChain: any[] | null
+    parentChain: any[] | null
   }
   subSubPaneEntry: any
   subPaneEntry: any
@@ -62,7 +63,8 @@ const initialState = {
     currentDropPaneId: null,
     currentDraggingId: null,
     currentDropPaneChain: null,
-    currentDropChain: null
+    currentDropChain: null,
+    parentChain: null,
   },
   subSubPaneEntry: {},
   subPaneEntry: {}

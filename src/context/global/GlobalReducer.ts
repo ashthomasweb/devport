@@ -96,7 +96,7 @@ export const GlobalReducer = (state: any, action: any) => {
         ...state.globalDragData,
         currentDropPaneId: null,
         currentDropId: action.payload.currentDropId,
-        currentDropChain: [action.payload.chain],
+        currentDropChain: [...action.payload.chain],
         currentDropPaneChain: null
       }
       // console.log(action.payload.currentDropId)

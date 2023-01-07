@@ -100,7 +100,7 @@ const SubcategoryPane = (props: any): JSX.Element => {
 
       {renderArray?.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <Entry key={index} data={entry} pane='sub' />
+          return <Entry key={index} data={entry} parentChain={display.currentPrimaryEntryData.chain} pane='sub' />
         } else return
       })}
       <button onClick={closePane}>X</button>

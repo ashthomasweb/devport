@@ -104,7 +104,7 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
         indexFinder(workingObject.entries, display.currentSubEntryData.id)
       ].entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <Entry key={index} data={entry} pane='subsub' />
+          return <Entry key={index} data={entry} parentChain={display.currentSubEntryData.chain} pane='subsub' />
         } else return
       })}
       <button onClick={closePane}>X</button>

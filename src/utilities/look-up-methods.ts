@@ -20,7 +20,13 @@ export const treeSearchAndUpdateInPlace = (
   newEntry: any = null
 ): void => {
   console.log(`Trace: treeSearchAndUpdateInPlace()`)
-  let depth = chain.length + 1
+  console.log(chain)
+  let depth
+  if (chain === undefined) {
+    depth = 1
+  } else {
+    depth = chain?.length + 1
+  }
 
   function updateFields(self: any) {
     self.title = newEntryValues.title
@@ -44,6 +50,7 @@ export const treeSearchAndUpdateInPlace = (
     self.entries = self.entries.filter(
       (entry: any) => entry.title !== newEntry.title
     )
+    debugger
   }
 
   let operation
@@ -94,16 +101,29 @@ export const treeSearchAndUpdateInPlace = (
   return treeObj
 }
 
-export const moveEntry = (dragData: any, workingObject: any, entry: any) => {
+export const moveEntry = (
+  dragData: any,
+  workingObject: any,
+  entry: any,
+  parentChain: any[]
+) => {
   let destinationId = dragData.currentDropId || dragData.currentDropPaneId
   let draggedEntryId = dragData.currentDraggingId
   console.log(destinationId)
   console.log(entry)
   console.log(dragData)
+  let chain =
+    dragData.currentDropChain === null
+      ? dragData.currentDropPaneChain
+      : dragData.currentDropChain
+  let id =
+    dragData.currentDropPaneId === null
+      ? dragData.currentDropId
+      : dragData.currentDropPaneId
   treeSearchAndUpdateInPlace(
     workingObject,
-    dragData.currentDropId | dragData.currentDropPaneId,
-    dragData.currentDropChain | dragData.currentDropPaneChain, // from drop id
+    id,
+    chain, // from drop id
     null,
     false,
     null,
@@ -111,11 +131,54 @@ export const moveEntry = (dragData: any, workingObject: any, entry: any) => {
   )
   // treeSearchAndUpdateInPlace(
   //   workingObject,
-  //   dragData.currentDraggingId,
-  //   entry.childOfChain, // from drop id
+  //   entry.childOfChain[entry.childOfChain.length-1],
+  //   parentChain,
   //   null,
   //   true,
   //   null,
   //   entry
   // )
+}
+
+export const findTreeEntry = (
+  treeObj: any,
+  entryId: any,
+  entryChain: any[]
+) => {
+  let entry
+  let depth = entryChain.length
+  if (depth === 1) {
+    entry = treeObj.entries[indexFinder(treeObj.entries, entryId)]
+  }
+  if (depth === 2) {
+    let parent = treeObj.entries[indexFinder(treeObj.entries, entryChain[1])]
+    entry = parent.entries[indexFinder(parent.entries, entryId)]
+  }
+  if (depth === 3) {
+    let gParent = treeObj.entries[indexFinder(treeObj.entries, entryChain[1])]
+    let parent = gParent.entries[indexFinder(gParent.entries, entryChain[2])]
+    entry = parent.entries[indexFinder(parent.entries, entryId)]
+  }
+  return entry
+}
+
+export const findTreeEntryParent = (
+  treeObj: any,
+  entryChain: any[]
+) => {
+  let parentEntry
+  let depth = entryChain.length
+  if (depth === 1) {
+    parentEntry = treeObj
+  }
+  if (depth === 2) {
+    let parent = treeObj.entries[indexFinder(treeObj.entries, entryChain[1])]
+    parentEntry = parent
+  }
+  if (depth === 3) {
+    let gParent = treeObj.entries[indexFinder(treeObj.entries, entryChain[1])]
+    let parent = gParent.entries[indexFinder(gParent.entries, entryChain[2])]
+    parentEntry = parent
+  }
+  return parentEntry
 }

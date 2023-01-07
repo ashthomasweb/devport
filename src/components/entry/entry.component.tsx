@@ -26,7 +26,9 @@ import {
   /* Helper Functions */
   indexFinder,
   treeSearchAndUpdateInPlace,
-  moveEntry
+  moveEntry,
+  findTreeEntry,
+  findTreeEntryParent
   /* Components */
   /* Icons */
 } from '../../export-hub'
@@ -43,7 +45,6 @@ const Entry = (props: any): JSX.Element => {
     globalDispatch,
   } = useContext(GlobalContext)
 
-  let [isCodeVisible, setIsCodeVisible]: any = useState(false)
   let [activeBorder, setActiveBorder]: any = useState(false)
   let [borderSwitch, setBorderSwitch]: any = useState(false)
 
@@ -73,20 +74,14 @@ const Entry = (props: any): JSX.Element => {
     }
   }
 
-  // const openSubcategoryPane = async () => {
-  //   dispatch({
-  //     type: 'OPEN_PRIMARY_PANE',
-  //     payload: {category: props.data.title}
-  //   })
-  //   gatherSinglePrimaryCategoryFromDB(userObj.auth, dispatch, props.data.title)
-  // }
-
-  const updateSubcategory = async (e: any) => {
+  const updateEntry = async (e: any) => {
     e.preventDefault()
-    let obj = await gatherSinglePrimaryCategoryFromDB(
-      userObj.auth,
-      props.data.id
-    )
+    let entry = findTreeEntry(workingObject, props.data.id, props.data.childOfChain)
+    console.log(entry)
+    let parent = findTreeEntryParent(workingObject, props.data.childOfChain)
+    console.log(parent)
+    parent.subtitle = 'another test!'
+    entry.subtitle = 'just a test'
     dispatch({
       type: 'TOG_ADD_PANE',
       payload: {
@@ -131,7 +126,6 @@ const Entry = (props: any): JSX.Element => {
         },
       })
       if (props.data.id === display.currentSubEntryData?.id) {
-        // debugger
         dispatch({
           type: 'TOG_SUBSUBCAT_PANE',
         })
@@ -166,7 +160,6 @@ const Entry = (props: any): JSX.Element => {
 
   useEffect(() => {
     if (props.pane === 'sub') {
-      // debugger
       if (
         display.currentSubEntryData?.id === props.data.id &&
         display.isSubSubcategoryPaneOpen
@@ -188,12 +181,12 @@ const Entry = (props: any): JSX.Element => {
     }
   }, [display.currentSubEntryData, display.finalPaneEntryData?.id, borderSwitch])
 
-  const fireDropEvent = (e: any) => {
+  const fireDropEvent = async (e: any) => {
     // console.log(globalDragData.currentDraggingId)
       // console.log(globalDragData.currentDropPaneId)
       // console.log(globalDragData.currentDropId)
-      moveEntry(globalDragData, workingObject, props.data)
-
+    await moveEntry(globalDragData, workingObject, props.data, props.parentChain)
+    deleteSubcategory(e)
     // if (
     //   globalDragData.currentDropId === globalDragData.currentDraggingId
     // ) {
@@ -206,12 +199,13 @@ const Entry = (props: any): JSX.Element => {
 
 
 
+
   const dragIdHandler = (e: any) => {
     // if (globalDragData.currentDropId === e.target.id) return
     e.stopPropagation()
     globalDispatch({
       type: 'SET_DRAG_ID',
-      payload: { currentDropId: props.data.id, chain: props.data.childOfChain },
+      payload: { currentDropId: props.data.id, chain: props.data.childOfChain, parentChain: props.parentChain },
     })
   }
 
@@ -244,7 +238,7 @@ const Entry = (props: any): JSX.Element => {
         }`,
         border: `${props.data.codePacket.length > 0 && 'none'}`,
       }}
-      onContextMenu={updateSubcategory}
+      onContextMenu={updateEntry}
       onClick={clickHandler}
       draggable
       onDragOver={dragIdHandler}

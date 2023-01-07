@@ -81,7 +81,7 @@ const AddPane = (props: any): JSX.Element => {
   const createPrimaryCat = (e: any) => {
     let dataPacket: entryType = {
       id: Math.random() * 10e18,
-      childOfChain: [0],
+      childOfChain: [],
       type: 'category',
       title: primaryRef.current.value,
       subtitle: subtitleRef.current.value,

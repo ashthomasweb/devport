@@ -86,7 +86,7 @@ const FinalPane = (props: any): JSX.Element => {
         )
       ].entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
-          return <Entry key={index} data={entry} pane='final' />
+          return <Entry key={index} data={entry} parentChain={display.finalPaneEntryData.chain} pane='final' />
         } else return
       })}
       <button onClick={closePane}>X</button>

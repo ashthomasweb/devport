@@ -9,16 +9,14 @@
 
 * NOTES:
 *   - React Context cannot be routed through this file.
-*   - Assets included in static object arrays must be loaded into the 
-*     declaration file directly. ie. /gcp-services-array.ts
+*   - 
 
-* (c) Copyright Kloudlog LLC 
 * Usage Rights: Not for public use or redistribution.
 
 ******************************************************************************/
 
 /* IMPORTS *********************************************************/
-/* Types */ 
+/* Types */
 // import { entryType } from './types/main-types'
 // import { codePackType } from './types/codePack-type'
 
@@ -29,7 +27,7 @@ import {
   savePrimaryCategoryToDB,
   gatherUserPrimaryCategoriesFromDB,
   authListener,
-  gatherSinglePrimaryCategoryFromDB
+  gatherSinglePrimaryCategoryFromDB,
 } from './firebase/firebase'
 
 /* Components */
@@ -49,19 +47,23 @@ import SubSubcategoryPane from './components/subsubcategory-pane/subsubcategory-
 import FinalPane from './components/final-pane/final-pane.component'
 import CodePane from './components/code-pane/code-pane.component'
 
-
-
 /* Mapped Assets */
 
 /* Initial Assets */
 
 /* Helper Methods */
-import { indexFinder, treeSearchAndUpdateInPlace, moveEntry } from './utilities/look-up-methods'
+import {
+  indexFinder,
+  treeSearchAndUpdateInPlace,
+  moveEntry,
+  findTreeEntry,
+  findTreeEntryParent,
+} from './utilities/look-up-methods'
 /* Icons */
 
 /* EXPORTS *********************************************************/
 
-/* Types */ 
+/* Types */
 // export { entryType, codePackType }
 
 /* Firebase */
@@ -71,7 +73,7 @@ export {
   savePrimaryCategoryToDB,
   gatherUserPrimaryCategoriesFromDB,
   authListener,
-  gatherSinglePrimaryCategoryFromDB
+  gatherSinglePrimaryCategoryFromDB,
 }
 
 /* Components */
@@ -98,7 +100,13 @@ export {
 /* Initial Assets */
 
 /* Helper Methods */
-export { indexFinder, treeSearchAndUpdateInPlace, moveEntry }
+export {
+  indexFinder,
+  treeSearchAndUpdateInPlace,
+  moveEntry,
+  findTreeEntry,
+  findTreeEntryParent,
+}
 /* Icons */
 
 /* END OF DOCUMENT ***********************************************************/
