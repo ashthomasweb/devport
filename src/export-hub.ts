@@ -50,6 +50,7 @@ import CodePane from './components/code-pane/code-pane.component'
 /* Mapped Assets */
 
 /* Initial Assets */
+import { guestData } from './assets/guest-data'
 
 /* Helper Methods */
 import {
@@ -99,6 +100,7 @@ export {
 /* Mapped Assets */
 
 /* Initial Assets */
+export { guestData }
 
 /* Helper Methods */
 export {

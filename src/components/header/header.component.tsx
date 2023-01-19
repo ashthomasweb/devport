@@ -104,16 +104,16 @@ const Header = (props: any): JSX.Element => {
     ]
 
     let animationArray = ['X', 'Y', 'Z']
-    let choosenAnimation = animationArray[Math.floor(Math.random() * 3)]
+    let chosenAnimation = animationArray[Math.floor(Math.random() * 3)]
+   
     function rotateCharAtIndex(index: number) {
-      charArray[index].current.className = `animate-${choosenAnimation}`
+      charArray[index].current.className = `animate-${chosenAnimation}`
     }
     function changeCharAtIndex(index: number) {
       charArray[index].current.style.color = 'lightblue'
       charArray[index].current.style.webkitTextStroke = '3px lightblue'
-
-
     }
+
     function resetCharAtIndex(index: number) {
       let prefix = charArray[index].current.style
       prefix.color = 'white'

@@ -70,25 +70,31 @@ const FinalPane = (props: any): JSX.Element => {
             : 'none'
         }`,
       }}>
-      <h3>{display.finalPaneEntryData.id}</h3>
-
+      {/* <h3>{display.finalPaneEntryData.id}</h3> */}
       <h3>{display.finalPaneEntryData.title}</h3>
       <p>{display.finalPaneEntryData.subtitle}</p>
-
-      {workingObject?.entries[
-        indexFinder(workingObject.entries, display.currentSubEntryData.id)
-      ].entries[
-        indexFinder(
-          workingObject.entries[
-            indexFinder(workingObject.entries, display.currentSubEntryData.id)
-          ].entries,
-          display.finalPaneEntryData.id
-        )
-      ].entries.map((entry: any, index: number) => {
-        if (entry.deletedAt === null) {
-          return <Entry key={index} data={entry} parentChain={display.finalPaneEntryData.chain} pane='final' />
-        } else return
-      })}
+      {
+        workingObject?.entries[
+          indexFinder(workingObject.entries, display.currentSubEntryData.id)
+        ].entries[
+          indexFinder(
+            workingObject.entries[
+              indexFinder(workingObject.entries, display.currentSubEntryData.id)
+            ].entries,
+            display.finalPaneEntryData?.id
+          )
+        ]?.entries.map((entry: any, index: number) => {
+          if (entry.deletedAt === null) {
+            return (
+              <Entry
+                key={index}
+                data={entry}
+                parentChain={display.finalPaneEntryData.chain}
+                pane='final'
+              />
+            )
+          } else return
+        })}
       <button onClick={closePane}>X</button>
       <button
         onClick={addItem}

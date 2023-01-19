@@ -182,7 +182,7 @@ export const MainReducer = (state: any, action: any) => {
     }
 
     case 'SET_CURRENT_SUB_ENTRY': {
-      console.log(`Trace: SET_CURRENT_SUB_ENTRY()`)
+      // console.log(`Trace: SET_CURRENT_SUB_ENTRY()`)
       let display = {
         ...state.display,
         currentSubEntryData: action.payload.currentSubEntryData

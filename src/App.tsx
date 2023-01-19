@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 import {
   /* Assets */
+  guestData,
   /* Database */
   authListener,
   /* Helper Functions */
@@ -37,6 +38,17 @@ const App = (props: any): JSX.Element => {
       })
     }
   }, [dispatch])
+
+  // dispatch({
+  //   type: 'SET_WORKING_OBJECT',
+  //   payload: { workingObject: guestData }
+  // })
+  useEffect(() => {
+  dispatch({
+    type: 'SET_PRIMARY_CATEGORIES',
+    payload: { primaryCategories: [guestData] },
+  })
+  }, [])
 
   let userAuth = getAuth()
   useEffect(() => {

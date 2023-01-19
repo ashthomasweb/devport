@@ -24,6 +24,7 @@ import {
   savePrimaryCategoryToDB,
   gatherUserPrimaryCategoriesFromDB,
   gatherSinglePrimaryCategoryFromDB,
+  guestData,
   /* Helper Functions */
   /* Components */
   /* Icons */
@@ -92,22 +93,17 @@ const PrimaryCategory = (props: any): JSX.Element => {
     }
   }
 
-  
-
-
-
-
-
-
-
-
   const openSubcategoryPane = async (e: any) => {
     setBorderSwitch(!borderSwitch)
-
-    let obj = await gatherSinglePrimaryCategoryFromDB(
-      userObj.auth,
-      props.data.id
-    )
+    let obj
+    if (userObj === null) {
+      obj = guestData
+    } else {
+      obj = await gatherSinglePrimaryCategoryFromDB(
+        userObj.auth,
+        props.data.id
+        )
+      }
     dispatch({
       type: 'SET_WORKING_OBJECT',
       payload: { workingObject: obj },

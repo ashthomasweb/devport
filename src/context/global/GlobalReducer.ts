@@ -91,7 +91,7 @@ export const GlobalReducer = (state: any, action: any) => {
     }
 
     case 'SET_DRAG_ID': {
-      console.log(`Trace: SET_DRAG_ID()`)
+      // console.log(`Trace: SET_DRAG_ID()`)
       let globalDragData = {
         ...state.globalDragData,
         currentDropPaneId: null,
@@ -107,7 +107,7 @@ export const GlobalReducer = (state: any, action: any) => {
     }
 
     case 'SET_DRAGGING_ID': {
-      console.log(`Trace: SET_DRAGGING_ID()`)
+      // console.log(`Trace: SET_DRAGGING_ID()`)
       let globalDragData = {
         ...state.globalDragData,
         currentDraggingId: action.payload.currentDraggingId,
@@ -120,7 +120,7 @@ export const GlobalReducer = (state: any, action: any) => {
     }
 
     case 'SET_DRAG_PANE': {
-      console.log(`Trace: SET_DRAG_PANE()`)
+      // console.log(`Trace: SET_DRAG_PANE()`)
       let globalDragData = {
         ...state.globalDragData,
         currentDropPaneId: action.payload.currentDropPaneId,
@@ -136,7 +136,7 @@ export const GlobalReducer = (state: any, action: any) => {
     }
 
     case 'SET_SUBSUB_ENTRY': {
-      console.log(`Trace: SET_SUBSUB_ENTRY()`)
+      // console.log(`Trace: SET_SUBSUB_ENTRY()`)
       let subSubEntry = action.payload.subSubEntry
       return {
         ...state,
@@ -145,7 +145,7 @@ export const GlobalReducer = (state: any, action: any) => {
     }
 
     case 'SET_SUB_ENTRY': {
-      console.log(`Trace: SET_SUB_ENTRY()`)
+      // console.log(`Trace: SET_SUB_ENTRY()`)
       let subEntry = action.payload.subEntry
       return {
         ...state,

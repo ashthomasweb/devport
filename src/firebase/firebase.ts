@@ -100,6 +100,7 @@ export const userInitializationHandler = async (
     }
   })
 }
+
 const backwardCompat = (entryArray) => {
   let newClone = cloneDeep(newEntry)
   let array: any[] = []
@@ -108,10 +109,12 @@ const backwardCompat = (entryArray) => {
       ...newClone,
       ...entry
     }
+   
     array.push(entry)
   })
   return array
 }
+
 export const gatherUserPrimaryCategoriesFromDB = async (userAuth, dispatch) => {
   // console.log(`Trace: gatherUserPrimaryCategoriesFromDB()`)
   if (!userAuth) return

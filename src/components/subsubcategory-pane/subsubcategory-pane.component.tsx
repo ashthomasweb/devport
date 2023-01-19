@@ -97,12 +97,16 @@ const SubSubcategoryPane = (props: any): JSX.Element => {
             : 'none'
         }`,
       }}>
-      <h3>{display.currentSubEntryData.id}</h3>
+      {/* <h3>{display.currentSubEntryData.id}</h3> */}
       <h3>{display.currentSubEntryData.title}</h3>
       <p>{display.currentSubEntryData.subtitle}</p>
-      {workingObject?.entries[
+      {workingObject.entries[
+        indexFinder(workingObject.entries, display.currentSubEntryData.id)
+      ] && 
+      
+      workingObject?.entries[
         indexFinder(workingObject.entries, display.currentSubEntryData?.id)
-      ].entries.map((entry: any, index: number) => {
+      ]?.entries.map((entry: any, index: number) => {
         if (entry.deletedAt === null) {
           return <Entry key={index} data={entry} parentChain={display.currentSubEntryData.chain} pane='subsub' />
         } else return

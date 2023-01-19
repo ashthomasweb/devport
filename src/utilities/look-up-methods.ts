@@ -19,14 +19,14 @@ export const treeSearchAndUpdateInPlace = (
   codePacket: any = null,
   newEntry: any = null
 ): void => {
-  console.log(`Trace: treeSearchAndUpdateInPlace()`)
+  // console.log(`Trace: treeSearchAndUpdateInPlace()`)
   console.log(chain)
 
   let depth
   if (chain === undefined) {
     depth = 1
   } else {
-    depth = chain?.length
+    depth = chain?.length + 1
   }
 
   function updateFields(self: any) {
@@ -42,11 +42,12 @@ export const treeSearchAndUpdateInPlace = (
     self.codePacket = codePacket
   }
 
-  function addEntryToPacket(self: any) {
-    console.log(self)
-    // debugger
-    self.entries.push(newEntry)
-  }
+//   function addEntryToPacket(self: any) {
+//     // debugger
+// console.log('test')
+//     console.log(self)
+//     self.entries.push(newEntry)
+//   }
 
 
   let operation
@@ -54,8 +55,6 @@ export const treeSearchAndUpdateInPlace = (
     operation = markDeleted
   } else if (codePacket !== null) {
     operation = updateCode
-  } else if (newEntry !== null) {
-    operation = addEntryToPacket
   } else {
     operation = updateFields
   }
@@ -70,7 +69,6 @@ export const treeSearchAndUpdateInPlace = (
     // subcategory - [top-level working obj ID, ]
     console.log('sub')
     let self = treeObj.entries[indexFinder(treeObj.entries, id)]
-    debugger
     // toDelete ? markDeleted(self) : updateFields(self, newEntryValues)
     operation(self)
   } else if (depth === 3) {
@@ -111,9 +109,7 @@ export const moveEntry = (
     dragData.currentDropPaneId === null
       ? dragData.currentDropId
       : dragData.currentDropPaneId
-      debugger
   let pushEntry = findTreeEntry(workingObject, id, chain)
-  debugger
   pushEntry.entries.push(entry)
 }
 
@@ -124,7 +120,7 @@ export const findTreeEntry = (
 ) => {
   let entry
   let depth = entryChain.length
-debugger
+  // debugger
   if (entryChain[0] === undefined) {
     entry = treeObj
   } else if (depth === 1) {

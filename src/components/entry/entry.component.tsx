@@ -35,6 +35,7 @@ import {
 } from '../../export-hub'
 
 import './entry.styles.scss'
+import { toast } from 'react-toastify'
 
 const Entry = (props: any): JSX.Element => {
   const {
@@ -178,13 +179,47 @@ const Entry = (props: any): JSX.Element => {
   }, [
     display.currentSubEntryData,
     display.finalPaneEntryData?.id,
+    workingObject,
     borderSwitch,
+    props.data.childOfChain,
   ])
 
   const fireDropEvent = (e: any) => {
-    // console.log(globalDragData.currentDraggingId)
-    // console.log(globalDragData.currentDropPaneId)
-    // console.log(globalDragData.currentDropId)
+    if (
+      globalDragData.currentDraggingId === globalDragData.currentDropId ||
+      globalDragData.currentDraggingId === globalDragData.currentDropPaneId
+    ) {
+      return
+    }
+    if (
+      globalDragData.currentDropPaneId ===
+      props.data.childOfChain[props.data.childOfChain.length - 1]
+    ) {
+      return
+    }
+    let entry = findTreeEntry(
+      workingObject,
+      props.data.id,
+      props.data.childOfChain
+    )
+    let nestedEntryIds: any[] = []
+    entry.entries.forEach((nested1Entry: any) => {
+      nestedEntryIds.push(nested1Entry.id)
+      nested1Entry.entries.forEach((nested2Entry: any) => {
+        nestedEntryIds.push(nested2Entry.id)
+        nested2Entry.entries.forEach((nested3Entry: any) => {
+          nestedEntryIds.push(nested3Entry.id)
+        })
+      })
+    })
+    if (
+      nestedEntryIds.includes(globalDragData.currentDropId) ||
+      nestedEntryIds.includes(globalDragData.currentDropPaneId)
+    ) {
+      toast('Cannot drop into child entry')
+      return
+    }
+
     moveEntry(globalDragData, workingObject, props.data)
     let chain: any =
       globalDragData.currentDropChain === null
@@ -195,26 +230,48 @@ const Entry = (props: any): JSX.Element => {
         ? globalDragData.currentDropId
         : globalDragData.currentDropPaneId
     let newChain = [...chain, id]
-    let entry = findTreeEntry(
-      workingObject,
-      props.data.id,
-      props.data.childOfChain
-    )
+
     let parent = findTreeEntryParent(workingObject, props.data.childOfChain)
+    let parentDepth = parent.childOfChain.length
     parent.entries = removeEntryFromArray(entry, parent)
-    entry.childOfChain = newChain
+    entry.childOfChain = newChain // need recursive lookup for all children - fun/ouch
+
+    entry.entries.forEach((nested1Entry: any) => {
+      nested1Entry.childOfChain = [...entry.childOfChain, entry.id]
+      nested1Entry.entries.forEach((nested2Entry: any) => {
+        nested2Entry.childOfChain = [...entry.childOfChain, entry.id]
+        nested2Entry.entries.forEach((nested3Entry: any) => {
+          nested3Entry.childOfChain = [...entry.childOfChain, entry.id]
+        })
+      })
+    })
+
+    if (parentDepth === 1) {
+      if (
+        globalDragData.currentDraggingId === display?.finalPaneEntryData?.id
+      ) {
+        dispatch({
+          type: 'CLOSE_FINAL_PANE',
+        })
+      }
+    }
+    if (parentDepth === 2) {
+      if (
+        globalDragData.currentDraggingId === display?.finalPaneEntryData?.id
+      ) {
+        dispatch({
+          type: 'CLOSE_FINAL_PANE',
+        })
+      }
+    }
+    if (parentDepth === 3) {
+      alert('No more levels of nesting available')
+    }
     dispatch({
       type: 'SET_WORKING_OBJECT',
       payload: { workingObject: workingObject },
     })
-    // if (
-    //   globalDragData.currentDropId === globalDragData.currentDraggingId
-    // ) {
-    //   console.log(globalDragData.currentDropPaneId)
-    // } else {
-    //   console.log(globalDragData.currentDropId)
-    //   // irrelevant - a 'pane' is just a displayed entry
-    // }
+    savePrimaryCategoryToDB(workingObject)
   }
 
   const dragIdHandler = (e: any) => {
@@ -229,14 +286,6 @@ const Entry = (props: any): JSX.Element => {
       },
     })
   }
-
-  // const dragEntryReset = () => {
-  //   console.log('test')
-  //   globalDispatch({
-  //     type: 'SET_DRAG_ID',
-  //     payload: { currentDropId: null },
-  //   })
-  // }
 
   const setDraggingId = () => {
     globalDispatch({
@@ -332,7 +381,7 @@ const Entry = (props: any): JSX.Element => {
             }}
             onClick={openCodePane}>{`<>`}</button>
         )}
-        <h6>{props.data.id}</h6>
+        {/* <h6>{props.data.id}</h6> */}
         <h4>{props.data.title}</h4>
         <p>{props.data.subtitle.substring(0, 120)}</p>
       </div>
